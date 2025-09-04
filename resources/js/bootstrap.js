@@ -30,3 +30,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+
+
+// import { gsap } from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// gsap.registerPlugin(ScrollTrigger);
+
+// gsap.to(".box", { x: 200, duration: 2 });
+
+
+// import './../assets/js/gsap.min.js';
+// import './../assets/js/ScrollTrigger.min.js';
+// import './../assets/js/jquery.min.js';
+import './../assets/js/popper.min.js';
+// import './../assets/js/particle-canvas';
+
+import './../assets/bootstrap/js/bootstrap';
+// import './../assets/js/main';

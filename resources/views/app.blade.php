@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <title inertia>{{ config('app.name', 'MOnad Testnet') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -17,5 +17,20 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
+            {{-- <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" ></script>
+        
+    <script src="https://crypt.tophivetheme.com/demo/js/particle-canvas.js"></script>
+
+    <script src="https://crypt.tophivetheme.com/demo/bootstrap/js/bootstrap.js"></script>
+    <script  src="https://crypt.tophivetheme.com/demo/js/main.js"></script> --}}
     </body>
 </html>
+
+
+
+
+
