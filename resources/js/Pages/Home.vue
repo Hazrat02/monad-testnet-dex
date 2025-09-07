@@ -40,7 +40,7 @@ onMounted(() => {
             <div class="d-sm-flex flex-row align-items-center mt-5 pt-5  ">
                 <div class="col-md-6 in-view">
                     <h1 class="fw-medium">Find the Next <span class="fw-bold gd-text">Crypto Gem</span></h1>
-                    <p class="crypt-grayscale-300 mt-4">Unleash Crypto Freedom: Limitless, Trustworthy.</p>
+                    <p class="crypt-grayscale-300 mt-4">“Monad Testnet: Unlocking Limitless Opportunities with Trusted, Decentralized Freedom.”</p>
                     <div class="d-flex align-items-center gap-3 mt-4">
                         <Link :href="route('swap')" class="custom-btn btn-11" ><span>Start Swaping</span>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

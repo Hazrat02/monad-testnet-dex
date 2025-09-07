@@ -15,14 +15,15 @@ import { connectWallet, connected, account,disconnectWallet,setGreeting,isConnec
 
           <div class="crypt-logo light">
              <Link :href="route('home')">
-              <img
-                src="https://crypt.tophivetheme.com/demo/images/logo-dark.svg"
+
+              <img style="width: 120px;height: 40px !important;"
+                src="img/logo.webp"
                 alt=""
               />
             </Link>
           </div>
 
-          <div class="flex hidesmscreen">
+          <!-- <div class="flex hidesmscreen">
             <ul
               class="d-flex flex-row align-items-center not-apply-bg gap-4 mb-0"
             >
@@ -301,7 +302,7 @@ import { connectWallet, connected, account,disconnectWallet,setGreeting,isConnec
                 </ul>
               </li>
             </ul>
-          </div>
+          </div> -->
         </div>
           
 
@@ -309,311 +310,30 @@ import { connectWallet, connected, account,disconnectWallet,setGreeting,isConnec
         <div class="col-auto d-flex flex-row align-items-center">
           <div class="user-settings gap-2 gap-sm-3">
 
-            <div class="dropdown profile_menu disable-sm-screen">
-              <a
-                class="nav-link crypto-has-dropdown fw-medium"
-                href="#!"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Assets
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  x="0"
-                  y="0"
-                  version="1.1"
-                  viewBox="0 0 29 29"
-                  xml:space="preserve"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-miterlimit="10"
-                    stroke-width="2"
-                    d="m20.5 11.5-6 6-6-6"
-                  ></path>
-                </svg>
-              </a>
-              <div class="dropdown-menu dropdown-menu-shows">
-                <div
-                  class="d-flex flex-column ps-2 pe-1 border-bottom border-success border-opacity-10"
-                >
-                  <p class="text-sm fw-bold crypt-grayscale-600 mb-0">
-                    Overview
-                  </p>
-                  <div class="d-flex col-auto gap-1 p-0">
-                    <div>
-                      <h4 class="fw-bold crypt-grayscale-400 mb-0 encrypted">
-                        0.00000
-                      </h4>
-                    </div>
-                    <div>
-                      <select
-                        class="form-select text-bg-bs2 crypt-grayscale-600"
-                      >
-                        <option selected>BTC</option>
-                        <option value="1">ETH</option>
-                        <option value="2">BNB</option>
-                        <option value="3">USDT</option>
-                      </select>
-                    </div>
-                  </div>
-                  <h6 class="text-sm crypt-grayscale-600 encrypted">
-                    ≈ $0.00 USDT
-                  </h6>
-                </div>
-                <div>
-                  <a class="dropdown-item text-left" href="my-asset.html">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM11.9999 9L8.99985 12L11.9999 15L14.9999 12L11.9999 9Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    Overview
-                  </a>
-                </div>
-                <div>
-                  <a class="dropdown-item" href="spot.html">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M9.99996 20.0302C13.3136 20.0302 15.9999 17.3439 15.9999 14.0302C15.9999 10.7166 13.3136 8.03027 9.99996 8.03027C6.68627 8.03027 4 10.7166 4 14.0302C4 17.3439 6.68627 20.0302 9.99996 20.0302ZM10.0001 12.0303L8.0001 14.0302L10.0001 16.0302L12 14.0302L10.0001 12.0303Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        opacity="0.4"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M17.9431 13.0726C19.1897 12.1633 19.9997 10.6914 19.9997 9.03024C19.9997 6.26883 17.7612 4.03027 14.9998 4.03027C13.3386 4.03027 11.8667 4.84034 10.9575 6.08698C14.6102 6.52271 17.5073 9.41976 17.9431 13.0726Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        opacity="0.4"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M18.811 19.7803L20.5306 21.5L19.47 22.5606L16.5054 19.596C16.1929 19.2836 16.1929 18.777 16.5054 18.4646L19.47 15.5L20.5306 16.5607L18.811 18.2803H23.0003V19.7803H18.811Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        opacity="0.4"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M5.18931 5.7803L3.46966 7.49996L4.53031 8.56061L7.49493 5.59599C7.80735 5.28357 7.80735 4.77704 7.49494 4.46463L4.53031 1.5L3.46966 2.56065L5.18931 4.28031H1V5.7803H5.18931Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    Spot
-                  </a>
-                </div>
-                <div>
-                  <a class="dropdown-item" href="margin.html">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        opacity="0.4"
-                        d="M6.63526 16.3363C8.65442 15.7953 9.85267 13.7198 9.31164 11.7007C8.77061 9.68151 6.69517 8.48325 4.67602 9.02428C2.65687 9.56531 1.45861 11.6408 1.99964 13.6599C2.54067 15.6791 4.61611 16.8773 6.63526 16.3363Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M17.6034 13.3978C20.6321 12.5862 22.4295 9.47303 21.6179 6.44429C20.8064 3.41557 17.6932 1.61818 14.6645 2.42972C11.6358 3.24127 9.83842 6.35443 10.6499 9.38316C11.4615 12.4119 14.5746 14.2093 17.6034 13.3978ZM15.6444 6.08567L14.3062 8.40349L16.6241 9.74168L17.9623 7.42386L15.6444 6.08567Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        opacity="0.4"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M20.958 14.9477L4.50603 19.356L4.13867 17.985L20.5906 13.5767L20.958 14.9477Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        opacity="0.4"
-                        d="M11.8706 20.4531L13.763 17.6143L15.6555 20.4531H11.8706Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    Margin
-                  </a>
-                </div>
-                <div>
-                  <a class="dropdown-item" href="futures.html">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M11.9999 17.6361C15.0124 17.6361 17.4545 15.1941 17.4545 12.1816C17.4545 9.16914 15.0124 6.72705 11.9999 6.72705C8.98749 6.72705 6.54541 9.16914 6.54541 12.1816C6.54541 15.1941 8.98749 17.6361 11.9999 17.6361ZM12.0001 10.3634L10.1819 12.1816L12.0001 13.9998L13.8183 12.1816L12.0001 10.3634Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        opacity="0.4"
-                        d="M4.16992 9.80079C5.18954 6.44343 8.30936 4 11.9999 4C16.5185 4 20.1817 7.66312 20.1817 12.1818L22.0001 9.45454"
-                        stroke="currentColor"
-                        stroke-width="1.36364"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        opacity="0.4"
-                        d="M19.8302 14.5626C18.8106 17.92 15.6908 20.3634 12.0003 20.3634C7.48159 20.3634 3.81847 16.7003 3.81847 12.1816L2 14.9089"
-                        stroke="currentColor"
-                        stroke-width="1.36364"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    Futures
-                  </a>
-                </div>
-                <div>
-                  <a class="dropdown-item" href="trading-bots.html">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        opacity="0.4"
-                        d="M3 10H1V14H3V10Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        opacity="0.4"
-                        d="M23 10H21V14H23V10Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M6 5C4.89543 5 4 5.89543 4 7V17C4 18.1046 4.89543 19 6 19H18C19.1046 19 20 18.1046 20 17V7C20 5.89543 19.1046 5 18 5H6ZM9.99991 8H7.99991V11H9.99991V8ZM14.3997 13.2004C13.7311 13.7027 12.9019 14 12.0003 14C11.0985 14 10.269 13.7027 9.6005 13.2005L8.39915 14.7995C9.40214 15.553 10.6505 16 12.0003 16C13.3502 16 14.5982 15.5528 15.601 14.7995L14.3997 13.2004ZM13.9998 8H15.9998V11H13.9998V8Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    Trading Bots
-                  </a>
-                </div>
-                <div>
-                  <a class="dropdown-item" href="earn.html">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        opacity="0.4"
-                        d="M8.24423 19.9962L3 16.5L3.65836 16.1708C4.50294 15.7485 5.49706 15.7485 6.34164 16.1708L8.15542 17.0777C8.71084 17.3554 9.32329 17.5 9.94427 17.5H13L10.9487 16.8162C10.3821 16.6274 10 16.0972 10 15.5H18.1716C18.702 15.5 19.2107 15.7107 19.5858 16.0858L21 17.5L18 21.5L16 20.5H9.90833C9.31605 20.5 8.73703 20.3247 8.24423 19.9962Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M9 14.5C12.3137 14.5 15 11.8137 15 8.5C15 5.18629 12.3137 2.5 9 2.5C5.68629 2.5 3 5.18629 3 8.5C3 11.8137 5.68629 14.5 9 14.5ZM9 6.5L7 8.5L9 10.5L11 8.5L9 6.5Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        opacity="0.4"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M15.0005 13.4494C16.0742 12.0877 16.7148 10.3686 16.7148 8.5C16.7148 6.63135 16.0742 4.91234 15.0005 3.55065C15.2338 3.51727 15.4723 3.5 15.7148 3.5C18.4763 3.5 20.7148 5.73858 20.7148 8.5C20.7148 11.2614 18.4763 13.5 15.7148 13.5C15.4723 13.5 15.2338 13.4827 15.0005 13.4494Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    Earn
-                  </a>
-                </div>
-              </div>
-            </div>
+            <Link :href="route('mint')" class="nav-link">
 
+              Mint
+            
+            </Link>
+            <Link :href="route('stake')" class="nav-link">
 
-            <div class="dropdown profile_menu disable-sm-screen">
+              Stake
+            
+            </Link>
+            <Link :href="route('mint')" class="nav-link">
 
-              <a
-                class="nav-link crypto-has-dropdown fw-medium"
-                href="#!"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Orders
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  x="0"
-                  y="0"
-                  version="1.1"
-                  viewBox="0 0 29 29"
-                  xml:space="preserve"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-miterlimit="10"
-                    stroke-width="2"
-                    d="m20.5 11.5-6 6-6-6"
-                  ></path>
-                </svg>
-              </a>
+              NFT
+            
+            </Link>
+            <Link :href="route('swap')" class="nav-link">
 
-              <!-- dropdown menu link -->
-              <ul class="profile_menu dropdown-menu dropdown-menu-shows">
-                <li>
-                  <a class="dropdown-item" href="order-history.html">
-                    Spot Orders
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="order-history.html">
-                    Margin Orders
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="order-history.html">
-                    Funding Orders
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="order-history.html">
-                    Earn Orders
-                  </a>
-                </li>
-              </ul>
-            </div>
+              Swap
+            
+            </Link>
+
 
     
-              <button v-if="!isConnected" class="btn btn-lg shiny-cta signup-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <button v-if="isConnected" class="btn btn-lg shiny-cta signup-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M21.5 10.5V14.5H17.5C16.9696 14.5 16.4609 14.2893 16.0858 13.9142C15.7107 13.5391 15.5 13.0304 15.5 12.5C15.5 11.9696 15.7107 11.4609 16.0858 11.0858C16.4609 10.7107 16.9696 10.5 17.5 10.5H21.5ZM18 12.69C18.0149 12.6275 18.0149 12.5625 18 12.5C18.0008 12.4344 17.9879 12.3694 17.962 12.3091C17.9362 12.2489 17.898 12.1946 17.85 12.15C17.7565 12.0584 17.6309 12.0071 17.5 12.0071C17.3691 12.0071 17.2435 12.0584 17.15 12.15C17.102 12.1946 17.0638 12.2489 17.038 12.3091C17.0121 12.3694 16.9992 12.4344 17 12.5C16.9979 12.5658 17.0102 12.6312 17.0362 12.6916C17.0621 12.7521 17.1009 12.8062 17.15 12.85C17.1949 12.8978 17.2491 12.936 17.3093 12.962C17.3695 12.9881 17.4344 13.0015 17.5 13.0015C17.5656 13.0015 17.6305 12.9881 17.6907 12.962C17.7509 12.936 17.8051 12.8978 17.85 12.85C17.9154 12.8136 17.9679 12.7576 18 12.69Z" fill="#facc15"/>
                                 <path d="M18 12.5C18.0149 12.5625 18.0149 12.6275 18 12.69C17.9787 12.7524 17.9407 12.8078 17.89 12.85C17.8451 12.8978 17.7909 12.936 17.7307 12.962C17.6705 12.9881 17.6056 13.0015 17.54 13.0015C17.4744 13.0015 17.4095 12.9881 17.3493 12.962C17.2891 12.936 17.2349 12.8978 17.19 12.85C17.1336 12.8102 17.0872 12.7579 17.0542 12.6972C17.0213 12.6365 17.0027 12.569 17 12.5C16.9992 12.4344 17.0122 12.3694 17.038 12.3091C17.0638 12.2489 17.102 12.1947 17.15 12.15C17.2435 12.0584 17.3692 12.0071 17.5 12.0071C17.6309 12.0071 17.7566 12.0584 17.85 12.15C17.8981 12.1947 17.9362 12.2489 17.9621 12.3091C17.9879 12.3694 18.0008 12.4344 18 12.5Z" fill="currentColor"/>
                                 <path d="M18.5 20H5.5C4.83696 20 4.20107 19.7366 3.73223 19.2678C3.26339 18.7989 3 18.163 3 17.5V7.5C3 6.83696 3.26339 6.20107 3.73223 5.73223C4.20107 5.26339 4.83696 5 5.5 5H18.5C19.163 5 19.7989 5.26339 20.2678 5.73223C20.7366 6.20107 21 6.83696 21 7.5V10.5C21 10.6326 20.9473 10.7598 20.8536 10.8536C20.7598 10.9473 20.6326 11 20.5 11C20.3674 11 20.2402 10.9473 20.1464 10.8536C20.0527 10.7598 20 10.6326 20 10.5V7.5C20 7.10218 19.842 6.72064 19.5607 6.43934C19.2794 6.15804 18.8978 6 18.5 6H5.5C5.10218 6 4.72064 6.15804 4.43934 6.43934C4.15804 6.72064 4 7.10218 4 7.5V17.5C4 17.8978 4.15804 18.2794 4.43934 18.5607C4.72064 18.842 5.10218 19 5.5 19H18.5C18.8978 19 19.2794 18.842 19.5607 18.5607C19.842 18.2794 20 17.8978 20 17.5V14.5C20 14.3674 20.0527 14.2402 20.1464 14.1464C20.2402 14.0527 20.3674 14 20.5 14C20.6326 14 20.7598 14.0527 20.8536 14.1464C20.9473 14.2402 21 14.3674 21 14.5V17.5C21 18.163 20.7366 18.7989 20.2678 19.2678C19.7989 19.7366 19.163 20 18.5 20Z" fill="currentColor"/>
@@ -946,7 +666,7 @@ import { connectWallet, connected, account,disconnectWallet,setGreeting,isConnec
               </div>
             </div>
 
-            <div class="controller">
+            <!-- <div class="controller">
               <a
                 href="#!"
                 class="notify"
@@ -962,7 +682,7 @@ import { connectWallet, connected, account,disconnectWallet,setGreeting,isConnec
                   />
                 </svg>
               </a>
-            </div>
+            </div> -->
 
          
             <div id="mobile_menu" class="close">

@@ -3,21 +3,24 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head,Link } from "@inertiajs/vue3";
-import { ref, onMounted } from "vue";
+import { ref, onMounted,computed } from "vue";
 
 const balances = ref([]);
 const userAddress = "0x0b9a6c15912F840a81C9AE41cc7382a728880edb";
 const selectedFrom = ref({
   symbol: 'MON',
   balance: '0.00',
-  usd_per_token: '3.85514500'
+  usd_per_token: '3.85514500',
+  mon_per_token: '1'
 })
 const amountFrom = ref("0.05");
 const amountTo = ref("0.01");
 const selectedTo = ref({
   symbol: 'CMON',
   balance: '0.00',
-  usd_per_token: '3.85514500'
+  usd_per_token: '3.85514500',
+  mon_per_token: '2'
+
 })
 // Fetch balances function
 const fetchBalances = async () => {
@@ -55,6 +58,20 @@ onMounted(() => {
 });
 
 function swap() {}
+
+const convertedAmount = computed(() => {
+  const priceTokenA = selectedFrom.value.mon_per_token
+  const priceTokenB = selectedTo.value.mon_per_token
+  const amountA = amountFrom.value
+
+  if (!priceTokenA || !priceTokenB || !amountA) return 0
+
+  const usdValue = amountA * priceTokenA
+  amountTo.value = usdValue / priceTokenB
+  return amountTo.value
+
+})
+
 </script>
 <template>
    <Head title="Createlize monad testnet swap page" />
@@ -115,6 +132,7 @@ function swap() {}
                               v-for="token in balances"
                               :key="token.symbol"
                               :value="token"
+                              :hidden="token.symbol === selectedTo.symbol"
                             >
                               <div>{{ token.symbol }}</div>
                               &nbsp;&nbsp;&nbsp;&nbsp;
@@ -164,6 +182,7 @@ function swap() {}
                           disabled
                           class="form-control text-sm"
                           placeholder="0.001 - 310000"
+                          :value="convertedAmount"
                         />
                         <div class="input-group-append input-group-text p-1">
                           <select
@@ -175,6 +194,7 @@ function swap() {}
                               v-for="token in balances"
                               :key="token.symbol"
                               :value="token"
+                                :hidden="token.symbol === selectedFrom.symbol"
                             >
                               <div>{{ token.symbol }}</div>
                               &nbsp;&nbsp;&nbsp;&nbsp;
@@ -184,7 +204,11 @@ function swap() {}
                         </div>
                       </div>
                       <label class="form-label crypt-grayscale-600 mt-1"
-                        >≈ $0.0</label
+                        >≈ {{
+                          (
+                            Number(selectedTo.usd_per_token) * amountTo
+                          ).toFixed(5)
+                        }}</label
                       >
                     </div>
                     <div class="mt-2 text-sm">
@@ -217,16 +241,15 @@ function swap() {}
               <table class="table table-dark table-hover crypt-tab">
                 <thead>
                   <tr>
-                    <th scope="col">Pairs</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Change (24h)</th>
+                    <th scope="col">Token</th>
+                    <th scope="col">Price(USD)</th>
+                    <th scope="col">Price(MON)</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$0.3943000"
+                     v-for="token in balances.slice(0, 12)" :key="token.symbol"
+                             
                   >
                     <td>
                       <div class="d-flex flex-row align-items-center gap-2">
@@ -250,413 +273,19 @@ function swap() {}
                         </div>
                         <div class="d-flex flex-row align-items-center gap-2">
                           <p class="fw-medium mb-0">
-                            USDT
-                            <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">5x</span>
+                            {{ token.symbol }}
+                            <span class="verified text-sm">Verified</span>
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td>$30.03</td>
-                    <td class="text-down">
-                      02.96%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/down.svg"
-                        width="16"
-                      />
+                    <td>${{ token.usd_per_token }}</td>
+                    <td >
+                      {{ Number(token.mon_per_token).toFixed(3) }} 
+                     
                     </td>
                   </tr>
-                  <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$0.765000"
-                  >
-                    <td>
-                      <div class="d-flex flex-row align-items-center gap-2">
-                        <div class="fav-btn">
-                          <svg
-                            class="favme bal1"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              stroke="currentColor"
-                              d="M11.173 3.007L12.768 3L15.178 8.11L20.504 8.941L21 10.436L17.11 14.449L18.005 20.085L16.707 21L11.972 18.352L7.236 21L5.94 20.077L6.886 14.445L3 10.436L3.496 8.941L8.818 8.111L11.173 3.007Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <div class="d-flex flex-row align-items-center gap-2">
-                          <p class="fw-medium mb-0">
-                            TON <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">20x</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>$21.12</td>
-                    <td class="text-down">
-                      17.88%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/down.svg"
-                        width="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$0.3780"
-                  >
-                    <td>
-                      <div class="d-flex flex-row align-items-center gap-2">
-                        <div class="fav-btn">
-                          <svg
-                            class="favme bal1"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              stroke="currentColor"
-                              d="M11.173 3.007L12.768 3L15.178 8.11L20.504 8.941L21 10.436L17.11 14.449L18.005 20.085L16.707 21L11.972 18.352L7.236 21L5.94 20.077L6.886 14.445L3 10.436L3.496 8.941L8.818 8.111L11.173 3.007Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <div class="d-flex flex-row align-items-center gap-2">
-                          <p class="fw-medium mb-0">
-                            LSK <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">10x</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>$3.53</td>
-                    <td class="text-up">
-                      19.23%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/up.svg"
-                        width="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$0.988700"
-                  >
-                    <td>
-                      <div class="d-flex flex-row align-items-center gap-2">
-                        <div class="fav-btn">
-                          <svg
-                            class="favme bal1"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              stroke="currentColor"
-                              d="M11.173 3.007L12.768 3L15.178 8.11L20.504 8.941L21 10.436L17.11 14.449L18.005 20.085L16.707 21L11.972 18.352L7.236 21L5.94 20.077L6.886 14.445L3 10.436L3.496 8.941L8.818 8.111L11.173 3.007Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <div class="d-flex flex-row align-items-center gap-2">
-                          <p class="fw-medium mb-0">
-                            POL <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">10x</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>$5.93</td>
-                    <td class="text-down">
-                      10.45%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/down.svg"
-                        width="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$1.765650"
-                  >
-                    <td>
-                      <div class="d-flex flex-row align-items-center gap-2">
-                        <div class="fav-btn">
-                          <svg
-                            class="favme bal1"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              stroke="currentColor"
-                              d="M11.173 3.007L12.768 3L15.178 8.11L20.504 8.941L21 10.436L17.11 14.449L18.005 20.085L16.707 21L11.972 18.352L7.236 21L5.94 20.077L6.886 14.445L3 10.436L3.496 8.941L8.818 8.111L11.173 3.007Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <div class="d-flex flex-row align-items-center gap-2">
-                          <p class="fw-medium mb-0">
-                            XLM <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">10x</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>$92.53</td>
-                    <td class="text-up">
-                      12.28%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/up.svg"
-                        width="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$12.9880"
-                  >
-                    <td>
-                      <div class="d-flex flex-row align-items-center gap-2">
-                        <div class="fav-btn">
-                          <svg
-                            class="favme bal1"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              stroke="currentColor"
-                              d="M11.173 3.007L12.768 3L15.178 8.11L20.504 8.941L21 10.436L17.11 14.449L18.005 20.085L16.707 21L11.972 18.352L7.236 21L5.94 20.077L6.886 14.445L3 10.436L3.496 8.941L8.818 8.111L11.173 3.007Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <div class="d-flex flex-row align-items-center gap-2">
-                          <p class="fw-medium mb-0">
-                            LINK
-                            <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">10x</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>$40.56</td>
-                    <td class="text-down">
-                      13.58%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/down.svg"
-                        width="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$0.766000"
-                  >
-                    <td>
-                      <div class="d-flex flex-row align-items-center gap-2">
-                        <div class="fav-btn">
-                          <svg
-                            class="favme bal1"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              stroke="currentColor"
-                              d="M11.173 3.007L12.768 3L15.178 8.11L20.504 8.941L21 10.436L17.11 14.449L18.005 20.085L16.707 21L11.972 18.352L7.236 21L5.94 20.077L6.886 14.445L3 10.436L3.496 8.941L8.818 8.111L11.173 3.007Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <div class="d-flex flex-row align-items-center gap-2">
-                          <p class="fw-medium mb-0">
-                            ROSE
-                            <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">10x</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>$68.55</td>
-                    <td class="text-up">
-                      12.28%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/up.svg"
-                        width="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$0.555000"
-                  >
-                    <td>
-                      <div class="d-flex flex-row align-items-center gap-2">
-                        <div class="fav-btn">
-                          <svg
-                            class="favme bal1"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              stroke="currentColor"
-                              d="M11.173 3.007L12.768 3L15.178 8.11L20.504 8.941L21 10.436L17.11 14.449L18.005 20.085L16.707 21L11.972 18.352L7.236 21L5.94 20.077L6.886 14.445L3 10.436L3.496 8.941L8.818 8.111L11.173 3.007Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <div class="d-flex flex-row align-items-center gap-2">
-                          <p class="fw-medium mb-0">
-                            XMR <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">10x</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>$30.03</td>
-                    <td class="text-up">
-                      15.68%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/up.svg"
-                        width="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$0.44400"
-                  >
-                    <td>
-                      <div class="d-flex flex-row align-items-center gap-2">
-                        <div class="fav-btn">
-                          <svg
-                            class="favme bal1"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              stroke="currentColor"
-                              d="M11.173 3.007L12.768 3L15.178 8.11L20.504 8.941L21 10.436L17.11 14.449L18.005 20.085L16.707 21L11.972 18.352L7.236 21L5.94 20.077L6.886 14.445L3 10.436L3.496 8.941L8.818 8.111L11.173 3.007Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <div class="d-flex flex-row align-items-center gap-2">
-                          <p class="fw-medium mb-0">
-                            DOGE
-                            <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">10x</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>$30.03</td>
-                    <td class="text-up">
-                      06.72%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/up.svg"
-                        width="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    data-bs-title="$20.4300"
-                  >
-                    <td>
-                      <div class="d-flex flex-row align-items-center gap-2">
-                        <div class="fav-btn">
-                          <svg
-                            class="favme bal1"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              stroke="currentColor"
-                              d="M11.173 3.007L12.768 3L15.178 8.11L20.504 8.941L21 10.436L17.11 14.449L18.005 20.085L16.707 21L11.972 18.352L7.236 21L5.94 20.077L6.886 14.445L3 10.436L3.496 8.941L8.818 8.111L11.173 3.007Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <div class="d-flex flex-row align-items-center gap-2">
-                          <p class="fw-medium mb-0">
-                            XRP <small class="crypt-grayscale-600">/BTC</small>
-                            <span class="verified text-sm">10x</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>$30.03</td>
-                    <td class="text-down">
-                      17.88%
-                      <img
-                        alt=""
-                        src="https://crypt.tophivetheme.com/demo/images/icon/down.svg"
-                        width="16"
-                      />
-                    </td>
-                  </tr>
+ 
                 </tbody>
               </table>
             </div>
@@ -669,7 +298,7 @@ function swap() {}
       </div>
     </div>
 
-    <button data-bs-toggle="modal" data-bs-target="#convertCrypto">
+    <button data-bs-toggle="modal" data-bs-target="#stakeCrypto">
       See more
     </button>
 
