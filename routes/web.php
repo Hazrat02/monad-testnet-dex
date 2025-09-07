@@ -33,6 +33,9 @@ Route::get('/stake', function () {
 Route::get('/mint', function () {
     return Inertia::render('Mint');
 })->name('mint');
+Route::get('/nft', function () {
+    return Inertia::render('Nft');
+})->name('nft');
 
 Route::middleware([
     'auth:sanctum',

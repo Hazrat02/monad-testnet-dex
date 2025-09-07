@@ -320,7 +320,7 @@ import { connectWallet, connected, account,disconnectWallet,setGreeting,isConnec
               Stake
             
             </Link>
-            <Link :href="route('mint')" class="nav-link">
+            <Link :href="route('nft')" class="nav-link active">
 
               NFT
             
@@ -1591,3 +1591,8 @@ import { connectWallet, connected, account,disconnectWallet,setGreeting,isConnec
 
   </body>
 </template>
+<style scoped>
+.active{
+color: rgb(255, 208, 0);
+}
+</style>
