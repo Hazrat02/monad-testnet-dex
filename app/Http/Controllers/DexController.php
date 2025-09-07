@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class DexController extends Controller
 {
@@ -74,6 +75,19 @@ class DexController extends Controller
     return response()->json(
         json_decode($response->getBody()->getContents(), true)
     );
+
+
+    }
+    public function assets($address)
+    {
+
+
+       $response = Http::get("https://testnet-api.monorail.xyz/v1/wallet/{$address}/balances");
+    return $response->json();
+
+    // return response()->json(
+    //     json_decode($response->getBody()->getContents(), true)
+    // );
 
 
     }

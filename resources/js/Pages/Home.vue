@@ -40,14 +40,14 @@ onMounted(() => {
             <div class="d-sm-flex flex-row align-items-center mt-5 pt-5  ">
                 <div class="col-md-6 in-view">
                     <h1 class="fw-medium">Find the Next <span class="fw-bold gd-text">Crypto Gem</span></h1>
-                    <p class="crypt-grayscale-300 mt-4">Unleash Crypto Freedom: Limitless, Trustworthy, and <a href="./login.html" class="text-info text-link underline" > Sign-Up Free</a>.</p>
+                    <p class="crypt-grayscale-300 mt-4">Unleash Crypto Freedom: Limitless, Trustworthy.</p>
                     <div class="d-flex align-items-center gap-3 mt-4">
-                        <button class="custom-btn btn-11" ><span>Start Swaping</span>
+                        <Link :href="route('swap')" class="custom-btn btn-11" ><span>Start Swaping</span>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22 7L13.5 15.5L8.5 10.5L2 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M16 7H22V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                        </button>
+                        </Link>
                         <button class="btn btn-lg shiny-cta signup-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M21.5 10.5V14.5H17.5C16.9696 14.5 16.4609 14.2893 16.0858 13.9142C15.7107 13.5391 15.5 13.0304 15.5 12.5C15.5 11.9696 15.7107 11.4609 16.0858 11.0858C16.4609 10.7107 16.9696 10.5 17.5 10.5H21.5ZM18 12.69C18.0149 12.6275 18.0149 12.5625 18 12.5C18.0008 12.4344 17.9879 12.3694 17.962 12.3091C17.9362 12.2489 17.898 12.1946 17.85 12.15C17.7565 12.0584 17.6309 12.0071 17.5 12.0071C17.3691 12.0071 17.2435 12.0584 17.15 12.15C17.102 12.1946 17.0638 12.2489 17.038 12.3091C17.0121 12.3694 16.9992 12.4344 17 12.5C16.9979 12.5658 17.0102 12.6312 17.0362 12.6916C17.0621 12.7521 17.1009 12.8062 17.15 12.85C17.1949 12.8978 17.2491 12.936 17.3093 12.962C17.3695 12.9881 17.4344 13.0015 17.5 13.0015C17.5656 13.0015 17.6305 12.9881 17.6907 12.962C17.7509 12.936 17.8051 12.8978 17.85 12.85C17.9154 12.8136 17.9679 12.7576 18 12.69Z" fill="#facc15"/>
                                 <path d="M18 12.5C18.0149 12.5625 18.0149 12.6275 18 12.69C17.9787 12.7524 17.9407 12.8078 17.89 12.85C17.8451 12.8978 17.7909 12.936 17.7307 12.962C17.6705 12.9881 17.6056 13.0015 17.54 13.0015C17.4744 13.0015 17.4095 12.9881 17.3493 12.962C17.2891 12.936 17.2349 12.8978 17.19 12.85C17.1336 12.8102 17.0872 12.7579 17.0542 12.6972C17.0213 12.6365 17.0027 12.569 17 12.5C16.9992 12.4344 17.0122 12.3694 17.038 12.3091C17.0638 12.2489 17.102 12.1947 17.15 12.15C17.2435 12.0584 17.3692 12.0071 17.5 12.0071C17.6309 12.0071 17.7566 12.0584 17.85 12.15C17.8981 12.1947 17.9362 12.2489 17.9621 12.3091C17.9879 12.3694 18.0008 12.4344 18 12.5Z" fill="currentColor"/>
@@ -58,8 +58,8 @@ onMounted(() => {
                     </div>
                     <div class="row mt-4 align-items-center">
                         <p class="crypt-grayscale-500">Excellent <span class="crypt-grayscale-100 meta">4.7 out of 5</span>
-                            <a href="https://www.trustpilot.com/" target="_blank">
-                              <img class="ms-2" src="https://crypt.tophivetheme.com/demo/images/partner/logo-11.svg" style="width:100px;" alt="">
+                            <a href="https://www.createlize.org/" target="_blank">
+                              Createlize
                             </a>
                         </p>
                     </div>

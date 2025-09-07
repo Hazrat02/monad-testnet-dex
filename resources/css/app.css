@@ -4391,7 +4391,7 @@ body .text-sm {
 .form-select {
     font-size: 14px;
     font-weight: 400;
-    border: none;
+    border: solid rgb(187, 179, 179) 2px;
     padding: 5px 34px 5px 10px;
     cursor: pointer;
     white-space: nowrap;

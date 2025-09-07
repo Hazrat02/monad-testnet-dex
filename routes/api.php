@@ -20,4 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/quote', [DexController::class, 'quote']);   // GET quote
+Route::get('/assets/{address}', [DexController::class, 'assets']);   // GET quote
 Route::post('/swap', [DexController::class, 'swap']);  

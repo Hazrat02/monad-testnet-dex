@@ -23,7 +23,16 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
+Route::get('/swap', function () {
+    return Inertia::render('Swap');
+})->name('swap');
+Route::get('/stake', function () {
+    return Inertia::render('Stake');
+})->name('stake');
+Route::get('/mint', function () {
+    return Inertia::render('Mint');
+})->name('mint');
 
 Route::middleware([
     'auth:sanctum',

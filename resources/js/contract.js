@@ -57,33 +57,125 @@ const userPortfolio = ref([]);
 const contractPortfolio = ref([]);
 
 
-  async function connectWallet() {
-  if (!window.ethereum) {
-    alert("Please install MetaMask!");
-    return;
-  }
+//   async function connectWallet(wallet_name) {
+//   if (!window.ethereum) {
+//     alert("Please install MetaMask!");
+//     return;
+//   }
 
+//   try {
+//     // -------------------------
+//     // 1) Request account access
+//     // -------------------------
+//     provider = new ethers.BrowserProvider(window.ethereum);
+//     await provider.send("eth_requestAccounts", []);
+//     signer = await provider.getSigner();
+//     account.value = await signer.getAddress();
+
+//     // -------------------------
+//     // 2) Ensure Monad Testnet
+//     // -------------------------
+//     const chainIdHex = "0x279f"; // 10143 in hex
+//     try {
+//       await window.ethereum.request({
+//         method: "wallet_switchEthereumChain",
+//         params: [{ chainId: chainIdHex }],
+//       });
+//     } catch (e) {
+//       if (e.code === 4902) {
+//         await window.ethereum.request({
+//           method: "wallet_addEthereumChain",
+//           params: [
+//             {
+//               chainId: chainIdHex,
+//               chainName: "Monad Testnet",
+//               rpcUrls: ["https://testnet-rpc.monad.xyz"],
+//               nativeCurrency: {
+//                 name: "MON",
+//                 symbol: "MON",
+//                 decimals: 18,
+//               },
+//               blockExplorerUrls: ["https://testnet.monadexplorer.com"],
+//             },
+//           ],
+//         });
+//       } else {
+//         throw e;
+//       }
+//     }
+
+//     // -------------------------
+//     // 3) Attach Contract
+//     // -------------------------
+//     contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+//     greeting.value = await contract.greeting();
+//     callFee.value = (await contract.callFee()).toString();
+//     connected.value = true;
+//     await loadPortfolios()
+//   } catch (err) {
+//     console.error("Wallet connection failed:", err);
+//   }
+// }
+
+
+
+
+async function connectWallet(walletName) {
   try {
+    if (!window.ethereum) {
+      alert("Please install an EVM wallet!");
+      return;
+    }
+
+    let ethProvider;
+
+    switch (walletName.toLowerCase()) {
+      case "metamask":
+        if (!window.ethereum.isMetaMask) alert("MetaMask not found!");
+        ethProvider = window.ethereum;
+        break;
+
+      case "bitget":
+        if (!window.bitkeep?.ethereum) alert("Bitget wallet not found!");
+        ethProvider = window.bitkeep.ethereum;
+        break;
+
+      case "coinbase":
+        if (!window.ethereum.isCoinbaseWallet) alert("Coinbase Wallet not found!");
+        ethProvider = window.ethereum;
+        break;
+
+      case "rainbow":
+        // Rainbow injects a normal ethereum provider, check for window.ethereum
+        ethProvider = window.ethereum;
+        break;
+
+      default:
+        alert("Unsupported wallet!");
+        return;
+    }
+
     // -------------------------
-    // 1) Request account access
+    // Connect provider
     // -------------------------
-    provider = new ethers.BrowserProvider(window.ethereum);
+    provider = new ethers.BrowserProvider(ethProvider);
     await provider.send("eth_requestAccounts", []);
     signer = await provider.getSigner();
-    account.value = await signer.getAddress();
+    const account = await signer.getAddress();
 
     // -------------------------
-    // 2) Ensure Monad Testnet
+    // Ensure Monad Testnet
     // -------------------------
-    const chainIdHex = "0x279f"; // 10143 in hex
+    const chainIdHex = "0x279f"; // 10143
     try {
-      await window.ethereum.request({
+      await ethProvider.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: chainIdHex }],
       });
     } catch (e) {
       if (e.code === 4902) {
-        await window.ethereum.request({
+        await ethProvider.request({
           method: "wallet_addEthereumChain",
           params: [
             {
@@ -105,18 +197,38 @@ const contractPortfolio = ref([]);
     }
 
     // -------------------------
-    // 3) Attach Contract
+    // Attach Contract
     // -------------------------
     contract = new ethers.Contract(contractAddress, contractABI, signer);
 
     greeting.value = await contract.greeting();
     callFee.value = (await contract.callFee()).toString();
     connected.value = true;
-    await loadPortfolios()
+    // await loadPortfolios();
+
+    console.log(`${walletName} connected:`, account);
+
   } catch (err) {
     console.error("Wallet connection failed:", err);
   }
 }
+
+
+console.log('provider',provider)
+
+async function isConnected() {
+  try {
+    if (!provider) return false;
+
+    const accounts = await provider.send("eth_accounts", []);
+    return accounts && accounts.length > 0;
+  } catch (err) {
+    console.error("Failed to check connection:", err);
+    return false;
+  }
+}
+
+
 
 function disconnectWallet() {
   provider = null;
@@ -328,5 +440,6 @@ export {
   swapToken,
   swapWmon,
   swapTokens,
-  loadPortfolios
+  loadPortfolios,
+  isConnected
 };

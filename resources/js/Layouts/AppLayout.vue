@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
-import { connectWallet, connected, account } from "@/contract.js";
+import { connectWallet, connected, account,disconnectWallet,setGreeting,isConnected } from "@/contract.js";
 </script>
 
 <template>
@@ -13,21 +13,13 @@ import { connectWallet, connected, account } from "@/contract.js";
       <div class="row align-items-center justify-content-between">
         <div class="col-auto d-flex flex-row align-items-center">
 
-          <div class="crypt-logo dark">
-            <a href="template-1.html">
+          <div class="crypt-logo light">
+             <Link :href="route('home')">
               <img
                 src="https://crypt.tophivetheme.com/demo/images/logo-dark.svg"
                 alt=""
               />
-            </a>
-          </div>
-          <div class="crypt-logo light">
-            <a href="template-1.html">
-              <img
-                src="https://crypt.tophivetheme.com/demo/images/logo.svg"
-                alt=""
-              />
-            </a>
+            </Link>
           </div>
 
           <div class="flex hidesmscreen">
@@ -311,6 +303,7 @@ import { connectWallet, connected, account } from "@/contract.js";
             </ul>
           </div>
         </div>
+          
 
         <!-- secondary menu -->
         <div class="col-auto d-flex flex-row align-items-center">
@@ -620,7 +613,7 @@ import { connectWallet, connected, account } from "@/contract.js";
             </div>
 
     
-              <button v-if="!connected" class="btn btn-lg shiny-cta signup-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <button v-if="!isConnected" class="btn btn-lg shiny-cta signup-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M21.5 10.5V14.5H17.5C16.9696 14.5 16.4609 14.2893 16.0858 13.9142C15.7107 13.5391 15.5 13.0304 15.5 12.5C15.5 11.9696 15.7107 11.4609 16.0858 11.0858C16.4609 10.7107 16.9696 10.5 17.5 10.5H21.5ZM18 12.69C18.0149 12.6275 18.0149 12.5625 18 12.5C18.0008 12.4344 17.9879 12.3694 17.962 12.3091C17.9362 12.2489 17.898 12.1946 17.85 12.15C17.7565 12.0584 17.6309 12.0071 17.5 12.0071C17.3691 12.0071 17.2435 12.0584 17.15 12.15C17.102 12.1946 17.0638 12.2489 17.038 12.3091C17.0121 12.3694 16.9992 12.4344 17 12.5C16.9979 12.5658 17.0102 12.6312 17.0362 12.6916C17.0621 12.7521 17.1009 12.8062 17.15 12.85C17.1949 12.8978 17.2491 12.936 17.3093 12.962C17.3695 12.9881 17.4344 13.0015 17.5 13.0015C17.5656 13.0015 17.6305 12.9881 17.6907 12.962C17.7509 12.936 17.8051 12.8978 17.85 12.85C17.9154 12.8136 17.9679 12.7576 18 12.69Z" fill="#facc15"/>
                                 <path d="M18 12.5C18.0149 12.5625 18.0149 12.6275 18 12.69C17.9787 12.7524 17.9407 12.8078 17.89 12.85C17.8451 12.8978 17.7909 12.936 17.7307 12.962C17.6705 12.9881 17.6056 13.0015 17.54 13.0015C17.4744 13.0015 17.4095 12.9881 17.3493 12.962C17.2891 12.936 17.2349 12.8978 17.19 12.85C17.1336 12.8102 17.0872 12.7579 17.0542 12.6972C17.0213 12.6365 17.0027 12.569 17 12.5C16.9992 12.4344 17.0122 12.3694 17.038 12.3091C17.0638 12.2489 17.102 12.1947 17.15 12.15C17.2435 12.0584 17.3692 12.0071 17.5 12.0071C17.6309 12.0071 17.7566 12.0584 17.85 12.15C17.8981 12.1947 17.9362 12.2489 17.9621 12.3091C17.9879 12.3694 18.0008 12.4344 18 12.5Z" fill="currentColor"/>
                                 <path d="M18.5 20H5.5C4.83696 20 4.20107 19.7366 3.73223 19.2678C3.26339 18.7989 3 18.163 3 17.5V7.5C3 6.83696 3.26339 6.20107 3.73223 5.73223C4.20107 5.26339 4.83696 5 5.5 5H18.5C19.163 5 19.7989 5.26339 20.2678 5.73223C20.7366 6.20107 21 6.83696 21 7.5V10.5C21 10.6326 20.9473 10.7598 20.8536 10.8536C20.7598 10.9473 20.6326 11 20.5 11C20.3674 11 20.2402 10.9473 20.1464 10.8536C20.0527 10.7598 20 10.6326 20 10.5V7.5C20 7.10218 19.842 6.72064 19.5607 6.43934C19.2794 6.15804 18.8978 6 18.5 6H5.5C5.10218 6 4.72064 6.15804 4.43934 6.43934C4.15804 6.72064 4 7.10218 4 7.5V17.5C4 17.8978 4.15804 18.2794 4.43934 18.5607C4.72064 18.842 5.10218 19 5.5 19H18.5C18.8978 19 19.2794 18.842 19.5607 18.5607C19.842 18.2794 20 17.8978 20 17.5V14.5C20 14.3674 20.0527 14.2402 20.1464 14.1464C20.2402 14.0527 20.3674 14 20.5 14C20.6326 14 20.7598 14.0527 20.8536 14.1464C20.9473 14.2402 21 14.3674 21 14.5V17.5C21 18.163 20.7366 18.7989 20.2678 19.2678C19.7989 19.7366 19.163 20 18.5 20Z" fill="currentColor"/>
@@ -889,7 +882,7 @@ import { connectWallet, connected, account } from "@/contract.js";
                       </svg>
                       API Management
                     </a>
-                    <a class="dropdown-item" href="./rewards.html">
+                    <a class="dropdown-item" @click.prevent="setGreeting('hi')">
                       <svg
                         width="24"
                         height="24"
@@ -922,9 +915,9 @@ import { connectWallet, connected, account } from "@/contract.js";
                           fill="currentColor"
                         ></path>
                       </svg>
-                      Reward Hub
+                      Start Gatting
                     </a>
-                    <a class="dropdown-item" href="./login.html">
+                    <a class="dropdown-item" @click.prevent="disconnectWallet">
                       <svg
                         width="24"
                         height="24"
@@ -946,7 +939,7 @@ import { connectWallet, connected, account } from "@/contract.js";
                           fill="currentColor"
                         />
                       </svg>
-                      Log Out
+                      Disconnect
                     </a>
                   </li>
                 </ul>
@@ -1746,7 +1739,84 @@ import { connectWallet, connected, account } from "@/contract.js";
 
 
 
-
+  <div class="modal fade" id="stakeCrypto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header d-flex">
+                    <h5 class="d-flex align-items-center gap-3 crypt-grayscale-100 mb-0">Stake ETH</h5>
+                    <button type="button" class="btn-close text-reset close-notify align-items-center justify-content-center" data-bs-dismiss="modal" aria-label="Close">
+                        <svg class="close-notify" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.5 4.5L4.5 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--Stake Form -->
+                    <div class="input-group justify-content-center mb-4">
+                        <div class="d-flex flex-row align-items-center gap-2 circles gd-bg px-3 py-1">
+                            <label class="form-label text-light mb-0">1 ETH ≈ 0.94773528 WBETH</label>
+                            <img alt="" width="24" src="https://crypt.tophivetheme.com/demo/images/icon/stake-change.svg">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="form-label crypt-grayscale-600">Stake Amount</label>
+                        <label class="form-label ms-auto crypt-grayscale-600">Balance : <span class="text-primary">0 ETH</span></label>
+                    </div>
+                    <div class="input-group d-flex">
+                        <input type="email" class="form-control text-sm" placeholder="Min 0.0001">
+                        <div class="input-group-append input-group-text p-1">
+                            <select class="form-select text-sm crypt-grayscale-500">
+                                <option selected>ETH</option>
+                                <option value="1">BTC</option>
+                                <option value="2">BNB</option>
+                                <option value="3">USDT</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group justify-content-center p-3">
+                        <img alt="" style="width:32px;" src="https://crypt.tophivetheme.com/demo/images/icon/stake-down.svg">
+                    </div>
+                    <div class="card-bs p-2 bg-5">
+                        <div class="input-group">
+                            <label class="form-label crypt-grayscale-600">Receive</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="--" disabled readonly>
+                            <span class="input-group-text fw-bold text-info">WBETH</span>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning d-flex mt-3 mb-4 p-2" role="alert">
+                        <svg class="flex-shrink-0 me-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor"/>
+                            <path d="M12 13.75C12.41 13.75 12.75 13.41 12.75 13V8C12.75 7.59 12.41 7.25 12 7.25C11.59 7.25 11.25 7.59 11.25 8V13C11.25 13.41 11.59 13.75 12 13.75Z" fill="currentColor"/>
+                            <path d="M12.92 15.6199C12.87 15.4999 12.8 15.3899 12.71 15.2899C12.61 15.1999 12.5 15.1299 12.38 15.0799C12.14 14.9799 11.86 14.9799 11.62 15.0799C11.5 15.1299 11.39 15.1999 11.29 15.2899C11.2 15.3899 11.13 15.4999 11.08 15.6199C11.03 15.7399 11 15.8699 11 15.9999C11 16.1299 11.03 16.2599 11.08 16.3799C11.13 16.5099 11.2 16.6099 11.29 16.7099C11.39 16.7999 11.5 16.8699 11.62 16.9199C11.74 16.9699 11.87 16.9999 12 16.9999C12.13 16.9999 12.26 16.9699 12.38 16.9199C12.5 16.8699 12.61 16.7999 12.71 16.7099C12.8 16.6099 12.87 16.5099 12.92 16.3799C12.97 16.2599 13 16.1299 13 15.9999C13 15.8699 12.97 15.7399 12.92 15.6199Z" fill="currentColor"/>
+                        </svg>
+                        <p class="mb-0">
+                            WBETH’s value increases over time as staking rewards accrue after launch. You will get back your initial ETH and earned rewards.
+                        </p>
+                    </div>
+                    <div class="mt-2 text-sm card-border p-2">
+                        <div class="d-flex flex-row justify-content-between">
+                            <p class="crypt-grayscale-500">Conversion Ratio</p>
+                            <p class="crypt-grayscale-500">1 ETH ≈ 0.94773528 WBETH</p>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <p class="crypt-grayscale-500">Reference APR</p>
+                            <p class="crypt-grayscale-500">2.82%</p>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <p class="crypt-grayscale-500">Monthly Est. Reward</p>
+                            <p class="text-up">0 ETH</p>
+                        </div>
+                    </div>
+                    <div class="d-grid mt-5 mb-3">
+                        <a class="btn btn-warning" href="" role="button">Stake</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
        <!-- Modal (Connect Wallet) -->
@@ -1768,23 +1838,23 @@ import { connectWallet, connected, account } from "@/contract.js";
                 <div class="modal-body">
                     <small class="crypt-grayscale-500">Popular wallet</small>
                     <div class="flex mt-2">
-                        <a @click.prevent="connectWallet()" class="btn btn-dark d-flex justify-content-between align-items-center mb-2" >
+                        <a @click.prevent="connectWallet('metamask')" class="btn btn-dark d-flex justify-content-between align-items-center mb-2" >
                             Metamask 
                             <img src="https://crypt.tophivetheme.com/demo/images/icon/metamask.svg" alt="" width="32">
                         </a>
-                        <a class="btn btn-dark d-flex justify-content-between align-items-center mb-2" href="#!">
+                        <a @click.prevent="connectWallet('bitget')" class="btn btn-dark d-flex justify-content-between align-items-center mb-2" href="#!">
                             WalletConnect 
                             <img src="https://crypt.tophivetheme.com/demo/images/icon/walletconnect.svg" alt="" width="32">
                         </a>
-                        <a class="btn btn-dark d-flex justify-content-between align-items-center mb-2" href="#!">
+                        <a @click.prevent="connectWallet('phantom')" class="btn btn-dark d-flex justify-content-between align-items-center mb-2" href="#!">
                             Phantom 
                             <img src="https://crypt.tophivetheme.com/demo/images/icon/phantom.svg" alt="" width="32">
                         </a>
-                        <a class="btn btn-dark d-flex justify-content-between align-items-center mb-2" href="#!">
+                        <a @click.prevent="connectWallet('coinbase')" class="btn btn-dark d-flex justify-content-between align-items-center mb-2" href="#!">
                             Coinbase Wallet 
                             <img src="https://crypt.tophivetheme.com/demo/images/icon/coinbase.svg" alt="" width="32">
                         </a>
-                        <a class="btn btn-dark d-flex justify-content-between align-items-center mb-2" href="#!">
+                        <a @click.prevent="connectWallet('rainbow')" class="btn btn-dark d-flex justify-content-between align-items-center mb-2" href="#!">
                             Rainbow 
                             <img src="https://crypt.tophivetheme.com/demo/images/icon/rainbow.svg" alt="" width="32">
                         </a>
