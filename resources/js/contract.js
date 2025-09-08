@@ -1,6 +1,6 @@
 import { ref, onMounted } from "vue";
 import { ethers } from "ethers";
-
+import { setWithTTL,getWithTTL  } from "./localstorage";
 const contractAddress = "0xA6a1ff9Cc47431BAA4Bd59d2EB27c63E218c0B3F";
 const tokenAddress = "0x0000000000000000000000000000000000000000";
 
@@ -37,6 +37,9 @@ let provider;
 let signer;
 let contract;
 
+
+
+
 // const greeting = ref("");
 // const callFee = ref("");
 // const account = ref("");
@@ -56,6 +59,20 @@ const swapRate = ref(0);
 const userPortfolio = ref([]);
 const contractPortfolio = ref([]);
 
+
+//  onMounted(() => {
+//  if (getWithTTL('address')) {
+// provider = getWithTTL('provider')
+// signer = getWithTTL('signer')
+// contract = getWithTTL('contract')
+//  connected.value = true;
+// //  connectWallet(getWithTTL('address').platform)
+
+
+//  } 
+
+
+// });
 
 //   async function connectWallet(wallet_name) {
 //   if (!window.ethereum) {
@@ -121,6 +138,8 @@ const contractPortfolio = ref([]);
 
 
 
+
+
 async function connectWallet(walletName) {
   try {
     if (!window.ethereum) {
@@ -141,15 +160,15 @@ async function connectWallet(walletName) {
         ethProvider = window.bitkeep.ethereum;
         break;
 
-      case "coinbase":
-        if (!window.ethereum.isCoinbaseWallet) alert("Coinbase Wallet not found!");
-        ethProvider = window.ethereum;
-        break;
+      // case "coinbase":
+      //   if (!window.ethereum.isCoinbaseWallet) alert("Coinbase Wallet not found!");
+      //   ethProvider = window.ethereum;
+      //   break;
 
-      case "rainbow":
-        // Rainbow injects a normal ethereum provider, check for window.ethereum
-        ethProvider = window.ethereum;
-        break;
+      // case "rainbow":
+      //   // Rainbow injects a normal ethereum provider, check for window.ethereum
+      //   ethProvider = window.ethereum;
+      //   break;
 
       default:
         alert("Unsupported wallet!");
@@ -163,8 +182,12 @@ async function connectWallet(walletName) {
     await provider.send("eth_requestAccounts", []);
     signer = await provider.getSigner();
     const account = await signer.getAddress();
+console.log('provider',provider)
+console.log('signer',signer)
+console.log('account',account)
+setWithTTL('address',{ account: account, platform: walletName } );
 
-    // -------------------------
+//     // -------------------------
     // Ensure Monad Testnet
     // -------------------------
     const chainIdHex = "0x279f"; // 10143
@@ -200,11 +223,14 @@ async function connectWallet(walletName) {
     // Attach Contract
     // -------------------------
     contract = new ethers.Contract(contractAddress, contractABI, signer);
+    // setWithTTL('contract',contract );
 
     greeting.value = await contract.greeting();
     callFee.value = (await contract.callFee()).toString();
+    
     connected.value = true;
     // await loadPortfolios();
+
 
     console.log(`${walletName} connected:`, account);
 
@@ -214,7 +240,7 @@ async function connectWallet(walletName) {
 }
 
 
-console.log('provider',provider)
+
 
 async function isConnected() {
   try {
