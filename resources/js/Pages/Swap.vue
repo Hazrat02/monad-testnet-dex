@@ -1,6 +1,7 @@
 
 
 <script setup>
+import { swapToken } from "@/contract";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head,Link } from "@inertiajs/vue3";
 import { ref, onMounted,computed } from "vue";
@@ -57,9 +58,33 @@ onMounted(() => {
   fetchBalances();
 });
 
-function swap() {}
+async function swap() {
+  try {
+
+    // const tx = await swapToken(
+    //   selectedFrom.address,
+    //   selectedTo.address,
+    //   '1',
+    //   '1'
+    // );
+    const tx = await swapToken(
+      selectedFrom.value.address,
+      selectedTo.value.address,
+      amountFrom.value,
+      amountTo.value
+    );
+
+    // console.log("Transaction sent, waiting for confirmation...");
+    // const receipt = await tx.wait();
+    console.log("Swap successful! Transaction receipt:", receipt);
+  } catch (err) {
+    console.error("Swap failed:", err);
+  }
+}
+
 
 const convertedAmount = computed(() => {
+  
   const priceTokenA = selectedFrom.value.mon_per_token
   const priceTokenB = selectedTo.value.mon_per_token
   const amountA = amountFrom.value
@@ -82,6 +107,8 @@ const convertedAmount = computed(() => {
       <div class="row g-2">
         <div class="row tab-content table-responsive card-bs p-2 mt-2">
           <!--Market Tabs -->
+
+          {{ selectedFrom.address }}
           <div class="col-12 col-md-6" id="convertCrypto">
             <div class="modal-dialog">
               <div class="modal-content">

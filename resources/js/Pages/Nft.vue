@@ -7,7 +7,7 @@ import { ref, onMounted, computed } from "vue";
 import { ethers } from "ethers";
 
 const provider = new ethers.JsonRpcProvider("https://testnet-rpc.monad.xyz"); 
-const contractAddress = "0xbadB4dccFe760292f541a4fA0aA09169DeF09f72"; 
+const contractAddress = "0x4FA562648baA2f36990d784B8fD3D3262294AFF2"; 
 
 const abi = [
   "function totalSupply() view returns (uint256)",

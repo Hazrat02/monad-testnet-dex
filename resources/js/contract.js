@@ -1,10 +1,14 @@
 import { ref, onMounted } from "vue";
 import { ethers } from "ethers";
+
 import { setWithTTL, removeKey } from "./localstorage";
-const contractAddress = "0xA2b4117FEf6E40f73054a60B45552959f6476a68";
+// const contractAddress = "0xA2b4117FEf6E40f73054a60B45552959f6476a68";
+const contractAddress = "0xFd3eC5ee5C28F635392cC9da716faee62C5C3FB7";
 const tokenAddress = "0x0000000000000000000000000000000000000000";
 
-
+// Usage
+const zero = '0x0000000000000000000000000000000000000000';      // "0x0000000000000000000000000000000000000000"
+const max = 2^256 - 1;       // 2^256 - 1
 
 // const contractABI = [
 //   "function greeting() view returns (string)",
@@ -50,7 +54,7 @@ const contractABI = [
   // Swap
   "function swapWmon() payable",
   "function swapOne(address tokenA, address tokenB, uint256 amount)",
-  "function swap(address tokenA, address tokenB, uint256 amountA, uint256 rate) payable",
+  "function swap(address tokenA, address tokenB, uint256 amountA, uint256 amountB) payable",
 
   // Portfolio
   "function getUserPortfolio(address user) view returns (address[] tokens, uint256[] balances)",
@@ -108,81 +112,6 @@ const swapRate = ref(0);
 const userPortfolio = ref([]);
 const contractPortfolio = ref([]);
 
-
-//  onMounted(() => {
-//  if (getWithTTL('address')) {
-// provider = getWithTTL('provider')
-// signer = getWithTTL('signer')
-// contract = getWithTTL('contract')
-//  connected.value = true;
-// //  connectWallet(getWithTTL('address').platform)
-
-
-//  } 
-
-
-// });
-
-//   async function connectWallet(wallet_name) {
-//   if (!window.ethereum) {
-//     alert("Please install MetaMask!");
-//     return;
-//   }
-
-//   try {
-//     // -------------------------
-//     // 1) Request account access
-//     // -------------------------
-//     provider = new ethers.BrowserProvider(window.ethereum);
-//     await provider.send("eth_requestAccounts", []);
-//     signer = await provider.getSigner();
-//     account.value = await signer.getAddress();
-
-//     // -------------------------
-//     // 2) Ensure Monad Testnet
-//     // -------------------------
-//     const chainIdHex = "0x279f"; // 10143 in hex
-//     try {
-//       await window.ethereum.request({
-//         method: "wallet_switchEthereumChain",
-//         params: [{ chainId: chainIdHex }],
-//       });
-//     } catch (e) {
-//       if (e.code === 4902) {
-//         await window.ethereum.request({
-//           method: "wallet_addEthereumChain",
-//           params: [
-//             {
-//               chainId: chainIdHex,
-//               chainName: "Monad Testnet",
-//               rpcUrls: ["https://testnet-rpc.monad.xyz"],
-//               nativeCurrency: {
-//                 name: "MON",
-//                 symbol: "MON",
-//                 decimals: 18,
-//               },
-//               blockExplorerUrls: ["https://testnet.monadexplorer.com"],
-//             },
-//           ],
-//         });
-//       } else {
-//         throw e;
-//       }
-//     }
-
-//     // -------------------------
-//     // 3) Attach Contract
-//     // -------------------------
-//     contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-//     greeting.value = await contract.greeting();
-//     callFee.value = (await contract.callFee()).toString();
-//     connected.value = true;
-//     await loadPortfolios()
-//   } catch (err) {
-//     console.error("Wallet connection failed:", err);
-//   }
-// }
 
 
 
@@ -402,29 +331,67 @@ async function deposit(tokenAddress, amount) {
 
 
 
-//   async function approveToken(tokenAddress, contractAddress, amount) {
-//   const token = new ethers.Contract(tokenAddress, ERC20ABI, signer);
+// async function swapToken(tokenA, tokenB, amountA, amountB) {
+//   const token = new ethers.Contract(tokenA, ERC20ABI, signer);
 //   const decimals = await token.decimals();
-//   const value = ethers.parseUnits(amount.toString(), decimals);
+//   const valueA = ethers.parseUnits(amountA.toString(), decimals);
+//   const valueB = ethers.parseUnits(amountB.toString(), decimals);
+// // Use the max uint256 value
+// const MAX_UINT = ethers.MaxUint256; // ethers.js v6
 
-//   const tx = await token.approve(contractAddress, value);
-//   await tx.wait();
+// // Approve unlimited allowance
+// const approveTx = await token.approve(contractAddress, MAX_UINT);
+// await approveTx.wait();
+ 
+//   // Now swap
+//   const swapTx = await contract.swap(tokenA, tokenB, valueA , valueB);
+//   await swapTx.wait();
+
 // }
 
-async function swapToken(tokenA, tokenB, amount) {
-  const token = new ethers.Contract(tokenA, ERC20ABI, signer);
-  const decimals = await token.decimals();
-  const value = ethers.parseUnits(amount.toString(), decimals);
 
-  // First approve tokenA for swap
-  // const approveTx = await token.approve(contract.target, value);
-  const approveTx = await token.approve(contractAddress, value);
-  await approveTx.wait();
+async function swapToken(tokenA, tokenB, amountA, amountB) {
+  try {
+    const decimalsA = tokenA === zero ? 18 : await getDecimals(tokenA);
+    const decimalsB = tokenB === zero ? 18 : await getDecimals(tokenB);
+    // const decimalsA = tokenA === zero ? 18 : 18;
+    // const decimalsB = tokenB === zero ? 18 : 18;
 
-  // Now swap
-  const swapTx = await contract.swapOne(tokenA, tokenB, value);
-  await swapTx.wait();
+    const parsedAmountA = ethers.parseUnits(amountA.toString(), decimalsA);
+    const parsedAmountB = ethers.parseUnits(amountB.toString(), decimalsB);
 
+    // Approve ERC20 tokenA if not native
+    if (tokenA !== zero) {
+      const tokenAContract = new ethers.Contract(tokenA, [ "function approve(address spender, uint256 amount) public returns (bool)",
+          "function allowance(address owner, address spender) public view returns (uint256)"], signer);
+      const allowance = await tokenAContract.allowance(await signer.getAddress(), contractAddress);
+      if (allowance < parsedAmountA) {
+        const approveTx = await tokenAContract.approve(contractAddress, ethers.MaxUint256);
+        await approveTx.wait();
+        console.log("TokenA approved");
+      }
+    }
+
+    // Call swap
+    const tx = await contract.swap(
+      tokenA,
+      tokenB,
+      parsedAmountA,
+      parsedAmountB,
+      { value: tokenA === zero ? parsedAmountA : 0 }
+    );
+    await tx.wait();
+    
+    console.log("Swap successful!");
+  } catch (err) {
+    console.error("Swap failed:", err);
+  }
+}
+
+// Helper to get ERC20 decimals
+async function getDecimals(tokenAddress) {
+  const erc20 = new ethers.Contract(tokenAddress, ["function decimals() view returns (uint8)"], signer);
+  return await erc20.decimals();
 }
 
 
