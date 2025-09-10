@@ -10,14 +10,23 @@ import {
   setGreeting,
   isConnected,
 } from "@/contract.js";
-
-
+// const title = ref("Monad Testnet")
+// onMounted(() => {
+//   title.value = "Dashboard"
+// })
+defineProps({
+  title: {
+    type: String,
+    default: "Monad Testnet"
+  }
+})
 
 </script>
 
 <template>
-  <body class="crypt-dark">
     <Head :title="title" />
+  <body class="crypt-dark">
+  
 
     <!-- Header -->
     <header class="crypt-header blur-header align-items-center fixed-top z-3">
@@ -1532,9 +1541,9 @@ import {
                 class="btn btn-dark d-flex justify-content-between align-items-center mb-2"
                 href="#!"
               >
-                WalletConnect
+                Bitget Wallet
                 <img
-                  src="https://crypt.tophivetheme.com/demo/images/icon/walletconnect.svg"
+                  src="img/bitget.svg"
                   alt=""
                   width="32"
                 />

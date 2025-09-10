@@ -69,8 +69,9 @@ const convertedAmount = computed(() => {
 });
 </script>
 <template>
-  <Head title="Createlize monad testnet Stake page" />
+
   <AppLayout>
+      <Head title="Createlize monad testnet Stake page" />
     <div class="container mt-5 pt-5">
       <!-- Account Data -->
       <div class="row g-2 card-border mb-4">

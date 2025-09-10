@@ -1,29 +1,78 @@
 import { ref, onMounted } from "vue";
 import { ethers } from "ethers";
-import { setWithTTL,getWithTTL  } from "./localstorage";
-const contractAddress = "0xA6a1ff9Cc47431BAA4Bd59d2EB27c63E218c0B3F";
+import { setWithTTL, removeKey } from "./localstorage";
+const contractAddress = "0xA2b4117FEf6E40f73054a60B45552959f6476a68";
 const tokenAddress = "0x0000000000000000000000000000000000000000";
 
 
 
+// const contractABI = [
+//   "function greeting() view returns (string)",
+//   "function callFee() view returns (uint256)",
+//   "function setGreeting(string _greeting) payable",
+//   "function withdrawETH()",
+//   "function withdrawToken(address _token)",
+//   "function withdrawWmon()",
+//   "function deposit(address _token, uint256 _amount)",
+//   "function depositWmon(uint256 _amount)",
+//   "function depositOwner(address _token, uint256 _amount)",
+//   "function swap(address tokenA, address tokenB, uint256 amountA, uint256 rate) payable",
+//   "function swapWmon() external payable",
+//   "function swapOne(address tokenA, address tokenB, uint256 amount) external",
+//   "function getUserPortfolio(address user) view returns (address[] memory, uint256[] memory)",
+//   "function getContractPortfolio() view returns (address[] memory, uint256[] memory)",
+//   "event Deposited(address indexed from, address token, uint256 amount)",
+//   "event Swapped(address indexed user, address tokenA, address tokenB, uint256 amountA, uint256 amountB)"
+// ];
+
 const contractABI = [
+  // Public variables (view)
+  "function owner() view returns (address)",
+  "function cmon() view returns (address)",
+  "function nft() view returns (address)",
   "function greeting() view returns (string)",
   "function callFee() view returns (uint256)",
+  "function totalTokenBalance(address) view returns (uint256)",
+
+  // Greeting
   "function setGreeting(string _greeting) payable",
+
+  // Withdraw
   "function withdrawETH()",
   "function withdrawToken(address _token)",
   "function withdrawWmon()",
+
+  // Deposit
   "function deposit(address _token, uint256 _amount)",
   "function depositWmon(uint256 _amount)",
   "function depositOwner(address _token, uint256 _amount)",
+
+  // Swap
+  "function swapWmon() payable",
+  "function swapOne(address tokenA, address tokenB, uint256 amount)",
   "function swap(address tokenA, address tokenB, uint256 amountA, uint256 rate) payable",
-  "function swapWmon() external payable",
-  "function swapOne(address tokenA, address tokenB, uint256 amount) external",
-  "function getUserPortfolio(address user) view returns (address[] memory, uint256[] memory)",
-  "function getContractPortfolio() view returns (address[] memory, uint256[] memory)",
+
+  // Portfolio
+  "function getUserPortfolio(address user) view returns (address[] tokens, uint256[] balances)",
+  "function getContractPortfolio() view returns (address[] tokens, uint256[] balances)",
+  "function getContractBalance(address _token) view returns (uint256)",
+
+  // Token
+  "function claimToken()",
+  "function ownerMintToken(address to, uint256 amount)",
+  "function getTimeUntilNextClaim(address user) view returns (uint256)",
+
+  // NFT
+  "function mintUserNFT()",
+  "function ownerMintNFT(address to)",
+
+  // Events
+  "event TokenClaimed(address indexed user)",
+  "event NFTMinted(address indexed user)",
   "event Deposited(address indexed from, address token, uint256 amount)",
   "event Swapped(address indexed user, address tokenA, address tokenB, uint256 amountA, uint256 amountB)"
 ];
+
 
 // Minimal ERC20 ABI for approve/allowance
 const ERC20ABI = [
@@ -49,7 +98,7 @@ let contract;
 const connected = ref(false);
 const account = ref("");
 const greeting = ref("");
-const callFee = ref("");
+const callFee = ref("0.002");
 // const tokenAddress = ref("");
 const tokenA = ref("");
 const tokenB = ref("");
@@ -141,6 +190,17 @@ const contractPortfolio = ref([]);
 
 
 async function connectWallet(walletName) {
+
+  const modalEl = document.getElementById('staticBackdrop')
+  if (modalEl) {
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl)
+    modal.hide()
+  }
+
+
+
+
+
   try {
     if (!window.ethereum) {
       alert("Please install an EVM wallet!");
@@ -182,12 +242,12 @@ async function connectWallet(walletName) {
     await provider.send("eth_requestAccounts", []);
     signer = await provider.getSigner();
     const account = await signer.getAddress();
-console.log('provider',provider)
-console.log('signer',signer)
-console.log('account',account)
-setWithTTL('address',{ account: account, platform: walletName } );
+    console.log('provider', provider)
+    console.log('signer', signer)
+    console.log('account', account)
+    setWithTTL('address', { account: account, platform: walletName });
 
-//     // -------------------------
+    //     // -------------------------
     // Ensure Monad Testnet
     // -------------------------
     const chainIdHex = "0x279f"; // 10143
@@ -227,7 +287,7 @@ setWithTTL('address',{ account: account, platform: walletName } );
 
     greeting.value = await contract.greeting();
     callFee.value = (await contract.callFee()).toString();
-    
+
     connected.value = true;
     // await loadPortfolios();
 
@@ -264,48 +324,84 @@ function disconnectWallet() {
   greeting.value = "";
   callFee.value = "";
   connected.value = false;
+  removeKey('address');
 }
 
 
 // -----------------------------------
 // Contract Calls
 // -----------------------------------
-  async function setGreeting(newGreeting) {
+async function setGreeting(newGreeting) {
   const fee = await contract.callFee();
   const tx = await contract.setGreeting(newGreeting, { value: fee });
   await tx.wait();
   greeting.value = await contract.greeting();
 }
 
-  async function withdrawETH() {
+async function withdrawETH() {
   const tx = await contract.withdrawETH();
   await tx.wait();
 }
 
-  async function withdrawToken(tokenAddress) {
+async function withdrawToken(tokenAddress) {
   const tx = await contract.withdrawToken(tokenAddress);
   await tx.wait();
 }
 
-  async function withdrawWmon() {
+async function withdrawWmon() {
   const tx = await contract.withdrawWmon();
   await tx.wait();
 }
 
-  async function deposit(tokenAddress, amount) {
+//   async function deposit(tokenAddress, amount) {
+//   const erc20 = new ethers.Contract(
+//     tokenAddress,
+//     ["function approve(address spender, uint256 amount) public returns (bool)"],
+//     signer
+//   );
+
+//   // Approve before deposit
+//   const weiAmount = ethers.parseUnits(amount.toString(), 18); // assumes token has 18 decimals
+//   await erc20.approve(contractAddress, weiAmount);
+
+//   const tx = await contract.deposit(tokenAddress, amount);
+//   await tx.wait();
+// }
+
+async function deposit(tokenAddress, amount) {
+  // Get signer
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+
+  // Create ERC20 contract
   const erc20 = new ethers.Contract(
     tokenAddress,
-    ["function approve(address spender, uint256 amount) public returns (bool)"],
+    [
+      "function approve(address spender, uint256 amount) public returns (bool)",
+      "function decimals() view returns (uint8)"
+    ],
     signer
   );
 
-  // Approve before deposit
-  const weiAmount = ethers.parseUnits(amount.toString(), 18); // assumes token has 18 decimals
-  await erc20.approve(contractAddress, weiAmount);
+  // Fetch token decimals dynamically
+  const decimals = await erc20.decimals();
 
-  const tx = await contract.deposit(tokenAddress, amount);
+  // Convert to correct wei amount
+  const weiAmount = ethers.parseUnits(amount.toString(), decimals);
+
+  // Approve
+  let tx = await erc20.approve(contractAddress, weiAmount);
   await tx.wait();
+
+  // Deposit (use weiAmount, not amount)
+  tx = await contract.deposit(tokenAddress, weiAmount);
+  await tx.wait();
+
+  console.log(`Deposited ${amount} ${tokenAddress}`);
 }
+
+
+
 //   async function approveToken(tokenAddress, contractAddress, amount) {
 //   const token = new ethers.Contract(tokenAddress, ERC20ABI, signer);
 //   const decimals = await token.decimals();
@@ -315,7 +411,7 @@ function disconnectWallet() {
 //   await tx.wait();
 // }
 
-  async function swapToken(tokenA, tokenB, amount) {
+async function swapToken(tokenA, tokenB, amount) {
   const token = new ethers.Contract(tokenA, ERC20ABI, signer);
   const decimals = await token.decimals();
   const value = ethers.parseUnits(amount.toString(), decimals);
@@ -332,7 +428,7 @@ function disconnectWallet() {
 }
 
 
-  async function depositWmon(amount) {
+async function depositWmon(amount) {
   const wmonAddress = "0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701";
 
   const erc20 = new ethers.Contract(
@@ -347,15 +443,15 @@ function disconnectWallet() {
   const tx = await contract.depositWmon(amount);
   await tx.wait();
 }
-  async function swapWmon() {
+async function swapWmon() {
   const wmonAddress = "0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701";
-const amount ='1'
+  const amount = '1'
   const erc20 = new ethers.Contract(
     wmonAddress,
     ["function approve(address spender, uint256 amount) external returns (bool)",
-  "function allowance(address owner, address spender) external view returns (uint256)",
-  "function balanceOf(address account) external view returns (uint256)",
-  "function decimals() view returns (uint8)"],
+      "function allowance(address owner, address spender) external view returns (uint256)",
+      "function balanceOf(address account) external view returns (uint256)",
+      "function decimals() view returns (uint8)"],
     signer
   );
 
@@ -365,7 +461,7 @@ const amount ='1'
   const tx = await contract.swapWmon({ value: 0 }); // if your function has payable
   await tx.wait();
 }
-  async function depositMON(amount) {
+async function depositMON(amount) {
   try {
     // Convert to wei
     const weiAmount = ethers.parseUnits(amount.toString(), 18);
@@ -383,7 +479,7 @@ const amount ='1'
   }
 }
 
-  async function depositOwner(tokenAddress, amount) {
+async function depositOwner(tokenAddress, amount) {
   const erc20 = new ethers.Contract(
     tokenAddress,
     ["function approve(address spender, uint256 amount) public returns (bool)"],
@@ -401,7 +497,7 @@ const amount ='1'
 // --------------------------
 // Swap
 // --------------------------
-  async function swapTokens() {
+async function swapTokens() {
   const fee = await contract.callFee();
   const weiAmountA = ethers.parseUnits(amountA.value.toString(), 18);
 
@@ -421,7 +517,7 @@ const amount ='1'
 // --------------------------
 // Load portfolios
 // --------------------------
-  async function loadPortfolios() {
+async function loadPortfolios() {
   if (!connected.value) return;
 
   const [userTokens, userBalances] = await contract.getUserPortfolio(account.value);
@@ -440,9 +536,52 @@ const amount ='1'
   }));
 }
 
+async function MintNft() {
+  try {
+    // Convert to wei
+    const weiAmount = ethers.parseEther("0.25");
+
+    // Call the fallback/receive function with MON
+    const tx = await signer.sendTransaction({
+      to: contractAddress,
+      value: weiAmount,
+    });
+
+
+
+    await tx.wait();
+    console.log(`Deposited ${amount} MON successfully`);
+  } catch (err) {
+    console.error("MON deposit failed:", err);
+  }
+
+
+
+  try {
+    const tx = await contract.mintUserNFT(); // no amount param needed
+    await tx.wait();
+    console.log("NFT minted successfully!");
+  } catch (err) {
+    console.error("NFT mint failed:", err);
+  }
+}
+
+async function MintNftOwner(address) {
+
+
+
+  try {
+    const tx = await contract.ownerMintNFT(address); // no amount param needed
+    await tx.wait();
+    console.log("NFT minted successfully!");
+  } catch (err) {
+    console.error("NFT mint failed:", err);
+  }
+}
 
 
 export {
+  MintNft,
   connected,
   account,
   greeting,

@@ -74,8 +74,9 @@ const convertedAmount = computed(() => {
 
 </script>
 <template>
-   <Head title="Createlize monad testnet swap page" />
+
   <AppLayout>
+       <Head title="Createlize monad testnet swap page" />
     <!-- Main Content -->
     <div class="container-fluid mt-5 pt-3">
       <div class="row g-2">
