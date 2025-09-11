@@ -119,6 +119,7 @@ const contractPortfolio = ref([]);
 
 
 async function connectWallet(walletName) {
+  ActionModal.open("Connecting", "Accept connection request in the wallet",'load')
 
   const modalEl = document.getElementById('staticBackdrop')
   if (modalEl) {
@@ -220,6 +221,7 @@ async function connectWallet(walletName) {
     connected.value = true;
     // await loadPortfolios();
 
+  ActionModal.close()
 
     console.log(`${walletName} connected:`, account);
 
@@ -351,6 +353,7 @@ async function deposit(tokenAddress, amount) {
 
 
 async function swapToken(tokenA, tokenB, amountA, amountB) {
+
   try {
     const decimalsA = tokenA === zero ? 18 : await getDecimals(tokenA);
     const decimalsB = tokenB === zero ? 18 : await getDecimals(tokenB);

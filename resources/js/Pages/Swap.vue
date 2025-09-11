@@ -43,6 +43,7 @@ const fetchBalances = async () => {
 };
 
 const exchangeTokens = () => {
+
   // Swap selected tokens
   const tempToken = { ...selectedFrom.value }
 
@@ -55,6 +56,8 @@ const exchangeTokens = () => {
   amountTo.value = tempAmount
 }
 onMounted(() => {
+  // Show
+
   fetchBalances();
 });
 
@@ -103,12 +106,12 @@ const convertedAmount = computed(() => {
   <AppLayout>
        <Head title="Createlize monad testnet swap page" />
     <!-- Main Content -->
+  
     <div class="container-fluid mt-5 pt-3">
       <div class="row g-2">
         <div class="row tab-content table-responsive card-bs p-2 mt-2">
           <!--Market Tabs -->
 
-          {{ selectedFrom.address }}
           <div class="col-12 col-md-6" id="convertCrypto">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -118,6 +121,7 @@ const convertedAmount = computed(() => {
                   >
                     Swap
                   </h5>
+              
                 </div>
                 <form @submit.prevent="swap">
                   <div class="modal-body">
@@ -475,4 +479,26 @@ select {
 .mouse{
     cursor: pointer;
 }
+
+  .spinner {
+    --size: 48px;
+    --color: #3b82f6;
+    width: var(--size);
+    height: var(--size);
+    border: calc(var(--size) / 8) solid rgba(255, 255, 255, 0.863);
+    border-top-color: var(--color);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    display:inline-block;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* accessibility helper */
+  .visually-hidden {
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden; clip: rect(1px,1px,1px,1px);
+    white-space: nowrap; border: 0; padding: 0; margin: -1px;
+  }
 </style>

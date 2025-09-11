@@ -21,13 +21,14 @@ defineProps({
   }
 })
 
+
 </script>
 
 <template>
     <Head :title="title" />
   <body class="crypt-dark">
   
-
+    <waitModal ref="globalModal" />
     <!-- Header -->
     <header class="crypt-header blur-header align-items-center fixed-top z-3">
       <div class="row align-items-center justify-content-between">
@@ -41,6 +42,7 @@ defineProps({
               />
             </Link>
           </div>
+
 
           <!-- <div class="flex hidesmscreen">
             <ul
