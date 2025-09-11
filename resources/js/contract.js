@@ -3,31 +3,12 @@ import { ethers } from "ethers";
 
 import { setWithTTL, removeKey } from "./localstorage";
 // const contractAddress = "0xA2b4117FEf6E40f73054a60B45552959f6476a68";
-const contractAddress = "0xFd3eC5ee5C28F635392cC9da716faee62C5C3FB7";
+const contractAddress = "0x7721285afBB74f5f95E2a15ceB8fd189c61451bc";
 const tokenAddress = "0x0000000000000000000000000000000000000000";
 
 // Usage
 const zero = '0x0000000000000000000000000000000000000000';      // "0x0000000000000000000000000000000000000000"
-const max = 2^256 - 1;       // 2^256 - 1
-
-// const contractABI = [
-//   "function greeting() view returns (string)",
-//   "function callFee() view returns (uint256)",
-//   "function setGreeting(string _greeting) payable",
-//   "function withdrawETH()",
-//   "function withdrawToken(address _token)",
-//   "function withdrawWmon()",
-//   "function deposit(address _token, uint256 _amount)",
-//   "function depositWmon(uint256 _amount)",
-//   "function depositOwner(address _token, uint256 _amount)",
-//   "function swap(address tokenA, address tokenB, uint256 amountA, uint256 rate) payable",
-//   "function swapWmon() external payable",
-//   "function swapOne(address tokenA, address tokenB, uint256 amount) external",
-//   "function getUserPortfolio(address user) view returns (address[] memory, uint256[] memory)",
-//   "function getContractPortfolio() view returns (address[] memory, uint256[] memory)",
-//   "event Deposited(address indexed from, address token, uint256 amount)",
-//   "event Swapped(address indexed user, address tokenA, address tokenB, uint256 amountA, uint256 amountB)"
-// ];
+const max = 2 ^ 256 - 1;       // 2^256 - 1
 
 const contractABI = [
   // Public variables (view)
@@ -65,6 +46,7 @@ const contractABI = [
   "function claimToken()",
   "function ownerMintToken(address to, uint256 amount)",
   "function getTimeUntilNextClaim(address user) view returns (uint256)",
+  "function getLastClaim(address user) view returns (uint256)",
 
   // NFT
   "function mintUserNFT()",
@@ -108,6 +90,7 @@ const tokenA = ref("");
 const tokenB = ref("");
 const amountA = ref(0);
 const swapRate = ref(0);
+const NextClaim = ref(24 * 60 * 60);
 
 const userPortfolio = ref([]);
 const contractPortfolio = ref([]);
@@ -119,7 +102,7 @@ const contractPortfolio = ref([]);
 
 
 async function connectWallet(walletName) {
-  ActionModal.open("Connecting", "Accept connection request in the wallet",'load')
+  ActionModal.open("Connecting", "Accept connection request in the wallet", 'load')
 
   const modalEl = document.getElementById('staticBackdrop')
   if (modalEl) {
@@ -172,9 +155,6 @@ async function connectWallet(walletName) {
     await provider.send("eth_requestAccounts", []);
     signer = await provider.getSigner();
     const account = await signer.getAddress();
-    console.log('provider', provider)
-    console.log('signer', signer)
-    console.log('account', account)
     setWithTTL('address', { account: account, platform: walletName });
 
     //     // -------------------------
@@ -213,17 +193,14 @@ async function connectWallet(walletName) {
     // Attach Contract
     // -------------------------
     contract = new ethers.Contract(contractAddress, contractABI, signer);
-    // setWithTTL('contract',contract );
-
     greeting.value = await contract.greeting();
     callFee.value = (await contract.callFee()).toString();
-
+    const time = await contract.getLastClaim(account);
+    NextClaim.value = Number(time);
     connected.value = true;
-    // await loadPortfolios();
+    ActionModal.close()
 
-  ActionModal.close()
 
-    console.log(`${walletName} connected:`, account);
 
   } catch (err) {
     console.error("Wallet connection failed:", err);
@@ -333,24 +310,6 @@ async function deposit(tokenAddress, amount) {
 
 
 
-// async function swapToken(tokenA, tokenB, amountA, amountB) {
-//   const token = new ethers.Contract(tokenA, ERC20ABI, signer);
-//   const decimals = await token.decimals();
-//   const valueA = ethers.parseUnits(amountA.toString(), decimals);
-//   const valueB = ethers.parseUnits(amountB.toString(), decimals);
-// // Use the max uint256 value
-// const MAX_UINT = ethers.MaxUint256; // ethers.js v6
-
-// // Approve unlimited allowance
-// const approveTx = await token.approve(contractAddress, MAX_UINT);
-// await approveTx.wait();
- 
-//   // Now swap
-//   const swapTx = await contract.swap(tokenA, tokenB, valueA , valueB);
-//   await swapTx.wait();
-
-// }
-
 
 async function swapToken(tokenA, tokenB, amountA, amountB) {
 
@@ -365,8 +324,8 @@ async function swapToken(tokenA, tokenB, amountA, amountB) {
 
     // Approve ERC20 tokenA if not native
     if (tokenA !== zero) {
-      const tokenAContract = new ethers.Contract(tokenA, [ "function approve(address spender, uint256 amount) public returns (bool)",
-          "function allowance(address owner, address spender) public view returns (uint256)"], signer);
+      const tokenAContract = new ethers.Contract(tokenA, ["function approve(address spender, uint256 amount) public returns (bool)",
+        "function allowance(address owner, address spender) public view returns (uint256)"], signer);
       const allowance = await tokenAContract.allowance(await signer.getAddress(), contractAddress);
       if (allowance < parsedAmountA) {
         const approveTx = await tokenAContract.approve(contractAddress, ethers.MaxUint256);
@@ -384,7 +343,7 @@ async function swapToken(tokenA, tokenB, amountA, amountB) {
       { value: tokenA === zero ? parsedAmountA : 0 }
     );
     await tx.wait();
-    
+
     console.log("Swap successful!");
   } catch (err) {
     console.error("Swap failed:", err);
@@ -520,7 +479,6 @@ async function MintNft() {
 
 
     await tx.wait();
-    console.log(`Deposited ${amount} MON successfully`);
   } catch (err) {
     console.error("MON deposit failed:", err);
   }
@@ -536,6 +494,7 @@ async function MintNft() {
   }
 }
 
+
 async function MintNftOwner(address) {
 
 
@@ -549,8 +508,29 @@ async function MintNftOwner(address) {
   }
 }
 
+async function MintToken() {
+  ActionModal.open("CMon Minting..", "Accept Minting request in the wallet", 'load')
+
+
+  try {
+    const tx = await contract.claimToken(); // no amount param needed
+    await tx.wait();
+    NextClaim.value=24 * 60 * 60;
+    ActionModal.open("Success", "Cmon minted successfully!", 'success')
+
+  } catch (err) {
+    console.error("Cmon mint failed:", err);
+    ActionModal.open("Failed", "Cmon mint failed!Try again.", 'error')
+
+  }
+
+
+}
 
 export {
+  contract,
+  MintToken,
+  NextClaim,
   MintNft,
   connected,
   account,

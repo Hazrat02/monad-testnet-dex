@@ -1318,6 +1318,7 @@ input:checked ~ .toggle {
     box-shadow: none;
     border-bottom: 1px solid var(--border-color);
     background: #ffffff;
+    z-index: 11 !important;
 }
 .crypt-header.transparent {
     border-bottom: none;
@@ -2672,6 +2673,9 @@ applyed all content deployed from section*/
     font-size: 12px;
     font-weight: 600;
     border-radius: 4px;
+}
+.shiny-cta{
+color: rgb(210, 204, 204);
 }
 .unverified {
     color: rgb(164, 18, 18);

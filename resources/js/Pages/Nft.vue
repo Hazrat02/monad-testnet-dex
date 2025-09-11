@@ -1,65 +1,55 @@
 <script setup>
-
-import { connected ,MintNft } from "@/contract";
+import { connected, MintNft } from "@/contract";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
 import { ref, onMounted, computed } from "vue";
 import { ethers } from "ethers";
 
-const provider = new ethers.JsonRpcProvider("https://testnet-rpc.monad.xyz"); 
-const contractAddress = "0x4FA562648baA2f36990d784B8fD3D3262294AFF2"; 
+const provider = new ethers.JsonRpcProvider("https://testnet-rpc.monad.xyz");
+const contractAddress = "0x4FA562648baA2f36990d784B8fD3D3262294AFF2";
 
-const abi = [
-  "function totalSupply() view returns (uint256)",
-];
-
+const abi = ["function totalSupply() view returns (uint256)"];
 
 const minted = ref(0);
-const click1= ref(false);
-const  click2= ref(false);
-const  click3= ref(false);
-
+const click = ref(0);
+const click1 = ref(false);
+const click2 = ref(false);
+const click3 = ref(false);
+const trueCount = computed(() => {
+  return [click1.value, click2.value, click3.value].filter((v) => v).length;
+});
 
 async function clickcount(button) {
-  if (button == '1') {
-    click1.value = true
-  } else if (button == '2') {
-    click2.value = true
+  if (button == "1") {
+    click1.value = true;
+  } else if (button == "2") {
+    click2.value = true;
   } else {
-    click3.value = true
+    click3.value = true;
   }
-
-
 }
 
 function copyContract() {
-    navigator.clipboard.writeText(contractAddress).then(() => {
-      alert("Copied: " + contractAddress);
-    });
-  }
-
+  navigator.clipboard.writeText(contractAddress).then(() => {
+    alert("Copied: " + contractAddress);
+  });
+}
 
 const contract = new ethers.Contract(contractAddress, abi, provider);
 
 async function getSupplyData() {
   const total = await contract.totalSupply();
 
-minted.value = total.toString();
-
-
-
+  minted.value = total.toString();
 }
 
 onMounted(() => {
-getSupplyData();
+  getSupplyData();
 });
-
-
 </script>
 <template>
-
   <AppLayout>
-      <Head title="Createlize monad testnet NFT mint page" />
+    <Head title="Createlize monad testnet NFT mint page" />
     <div class="mt-5">
       <div class="row justify-content-center g-2 mt-5">
         <div class="col-12 col-md-12 col-lg-9">
@@ -69,11 +59,7 @@ getSupplyData();
               <div class="col-12 col-md-12 col-xl-7">
                 <div class="row justify-content-evenly">
                   <div class="mt-5 col-3">
-                    <img
-                      class="img-fluid"
-                      src="img/nft.png"
-                      alt=""
-                    />
+                    <img class="img-fluid" src="img/nft.png" alt="" />
                   </div>
                   <div class="col-9 mt-5">
                     <div class="d-flex flex-wrap align-items-center gap-2">
@@ -92,13 +78,18 @@ getSupplyData();
                     </div>
                     <div class="d-flex flex-wrap align-items-center gap-3">
                       <div class="verified gd-bg px-0">
-                        <a class="d-flex gap-2 mb-2 verified mt-2" >
+                        <a class="d-flex gap-2 mb-2 verified mt-2">
                           <p class="crypt-grayscale-600 mb-0">CON:</p>
-                          <p class="crypt-grayscale-100 mb-0">{{ contractAddress.slice(0, 5) + "***" + contractAddress.slice(-6) }}</p>
+                          <p class="crypt-grayscale-100 mb-0">
+                            {{
+                              contractAddress.slice(0, 5) +
+                              "***" +
+                              contractAddress.slice(-6)
+                            }}
+                          </p>
                           <div
                             class="crypt-grayscale-500"
                             @click="copyContract"
-                           
                             title="Copy"
                           >
                             <svg
@@ -182,10 +173,8 @@ getSupplyData();
                       <p class="crypt-grayscale-600 mb-0">Minted</p>
                       <a
                         class="crypt-grayscale-100 d-flex align-items-center text-link"
-                   
                       >
                         <h3 class="text-link fw-bold mb-0">{{ minted }}</h3>
-                       
                       </a>
                     </div>
                   </div>
@@ -200,9 +189,17 @@ getSupplyData();
     <!-- Daily Check-In -->
     <div class="card-bs container p-3 mb-2">
       <div class="d-flex justify-content-between">
-        <h4 class="fw-medium mb-4">Complate all task</h4>
+        <h4 class="fw-medium mb-4">
+          Complate all task --- {{ trueCount }}/3
+        </h4>
         <div class="pb-2">
-          <button @click="MintNft" v-if="connected" :disabled="!click1|| !click2 || !click3" class="btn btn-editor-sm btn-warning" role="button">
+          <button
+            @click="MintNft"
+            v-if="connected"
+            :disabled="!click1 || !click2 || !click3"
+            class="btn btn-editor-sm btn-warning"
+            role="button"
+          >
             <svg
               width="18"
               height="18"
@@ -227,9 +224,13 @@ getSupplyData();
             </svg>
             Claim NFT
           </button>
-          <button      data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop" v-else  class="btn btn-editor-sm btn-warning" role="button">
-            
+          <button
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            v-else
+            class="btn btn-editor-sm btn-warning"
+            role="button"
+          >
             Connect Wallet
           </button>
         </div>
@@ -258,7 +259,15 @@ getSupplyData();
           <div>
             <h6 class="crypt-grayscale-300 fs-6 mb-0">X follow</h6>
             <p class="crypt-grayscale-600 mb-0 mt-1">
-             Click here to follow  <a @click="clickcount('1')" target="_blank" href="https://x.com/Hazratalli02" class="text-info fw-medium">Createlize Monad</a> on X.
+              Click here to follow
+              <a
+                @click="clickcount('1')"
+                target="_blank"
+                href="https://x.com/Hazratalli02"
+                class="text-info fw-medium"
+                >Createlize Monad</a
+              >
+              on X.
             </p>
           </div>
         </div>
@@ -269,7 +278,14 @@ getSupplyData();
           <div>
             <h6 class="crypt-grayscale-300 fs-6 mb-0">Like & Repost</h6>
             <p class="crypt-grayscale-600 mb-0 mt-1">
-               <a  @click="clickcount('2')" target="_blank"  href="https://x.com/Hazratalli02" class="text-info fw-medium">Click here</a> and show your support — like & repost our latest post on X.
+              <a
+                @click="clickcount('2')"
+                target="_blank"
+                href="https://x.com/Hazratalli02"
+                class="text-info fw-medium"
+                >Click here</a
+              >
+              and show your support — like & repost our pin post on X.
             </p>
           </div>
         </div>
@@ -278,11 +294,16 @@ getSupplyData();
             <div class="bullet-circle"></div>
           </div>
           <div>
-            <h6 class="crypt-grayscale-300 fs-6 mb-0">
-              Join on TG
-            </h6>
+            <h6 class="crypt-grayscale-300 fs-6 mb-0">Join on TG</h6>
             <p class="crypt-grayscale-600 mb-0 mt-1">
-              <a  @click="clickcount('3')" target="_blank"  href="https://t.me/crypto_minners2" class="text-info fw-medium">Join our TG</a> to connect, engage, and stay updated with the community.
+              <a
+                @click="clickcount('3')"
+                target="_blank"
+                href="https://t.me/crypto_minners2"
+                class="text-info fw-medium"
+                >Join our TG</a
+              >
+              to connect, engage, and stay updated with the community.
             </p>
           </div>
         </div>
