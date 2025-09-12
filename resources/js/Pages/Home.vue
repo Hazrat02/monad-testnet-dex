@@ -8,7 +8,6 @@ import {
   account,
   disconnectWallet,
   setGreeting,
-  isConnected,
 } from "@/contract.js";
 
 onMounted(() => {

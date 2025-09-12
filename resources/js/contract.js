@@ -1,7 +1,7 @@
 import { ref, onMounted } from "vue";
 import { ethers } from "ethers";
 
-import { setWithTTL, removeKey } from "./localstorage";
+import { setWithTTL, removeKey, tokenPrice } from "./localstorage";
 // const contractAddress = "0xA2b4117FEf6E40f73054a60B45552959f6476a68";
 const contractAddress = "0x7721285afBB74f5f95E2a15ceB8fd189c61451bc";
 const tokenAddress = "0x0000000000000000000000000000000000000000";
@@ -151,11 +151,16 @@ async function connectWallet(walletName) {
     // -------------------------
     // Connect provider
     // -------------------------
+
     provider = new ethers.BrowserProvider(ethProvider);
     await provider.send("eth_requestAccounts", []);
     signer = await provider.getSigner();
-    const account = await signer.getAddress();
-    setWithTTL('address', { account: account, platform: walletName });
+
+    tokenPrice.value = '';
+    account.value = await signer.getAddress();
+
+
+    setWithTTL('address', { account: account.value, platform: walletName });
 
     //     // -------------------------
     // Ensure Monad Testnet
@@ -195,7 +200,11 @@ async function connectWallet(walletName) {
     contract = new ethers.Contract(contractAddress, contractABI, signer);
     greeting.value = await contract.greeting();
     callFee.value = (await contract.callFee()).toString();
-    const time = await contract.getLastClaim(account);
+    const time = await contract.getLastClaim(account.value);
+
+    const balance = await contract.totalTokenBalance('0x0290377d81c20F6347dbA71F5ca5d00316c8f33d');
+    console.log('dsd', balance);
+
     NextClaim.value = Number(time);
     connected.value = true;
     ActionModal.close()
@@ -210,21 +219,12 @@ async function connectWallet(walletName) {
 
 
 
-async function isConnected() {
-  try {
-    if (!provider) return false;
 
-    const accounts = await provider.send("eth_accounts", []);
-    return accounts && accounts.length > 0;
-  } catch (err) {
-    console.error("Failed to check connection:", err);
-    return false;
-  }
-}
 
 
 
 function disconnectWallet() {
+  tokenPrice.value = ''
   provider = null;
   signer = null;
   contract = null;
@@ -312,6 +312,7 @@ async function deposit(tokenAddress, amount) {
 
 
 async function swapToken(tokenA, tokenB, amountA, amountB) {
+  ActionModal.open("Swapping", "Accept all request in the wallet", 'load')
 
   try {
     const decimalsA = tokenA === zero ? 18 : await getDecimals(tokenA);
@@ -343,11 +344,30 @@ async function swapToken(tokenA, tokenB, amountA, amountB) {
       { value: tokenA === zero ? parsedAmountA : 0 }
     );
     await tx.wait();
+    ActionModal.open("Success", "Swap successful!", 'success')
+    return true
 
-    console.log("Swap successful!");
   } catch (err) {
-    console.error("Swap failed:", err);
+    console.log(err)
+    let reason = "Transaction failed";
+
+    // Try to extract reason safely
+    if (err.reason) {
+      reason = err.reason;
+    } else if (err.error && err.error.message) {
+      reason = err.error.message;
+    } else if (err.shortMessage) {
+      reason = err.shortMessage;
+    } else if (err.cause && err.cause.reason) {
+      reason = err.cause.reason;
+    } else if (err.message) {
+      reason = err.message;
+    }
+
+    ActionModal.open("Failed", reason, 'error')
+    return false
   }
+
 }
 
 // Helper to get ERC20 decimals
@@ -515,7 +535,26 @@ async function MintToken() {
   try {
     const tx = await contract.claimToken(); // no amount param needed
     await tx.wait();
-    NextClaim.value=24 * 60 * 60;
+    NextClaim.value = 24 * 60 * 60;
+    ActionModal.open("Success", "Cmon minted successfully!", 'success')
+
+  } catch (err) {
+    console.error("Cmon mint failed:", err);
+    ActionModal.open("Failed", "Cmon mint failed!Try again.", 'error')
+
+  }
+
+
+}
+async function MintTokenOwner(address, amount) {
+  ActionModal.open("CMon Minting..", "Accept Minting request in the wallet", 'load')
+
+  const parsedAmountA = ethers.parseUnits(amount.toString(), 18);
+
+  try {
+    const tx = await contract.ownerMintToken(address, parsedAmountA); // no amount param needed
+    await tx.wait();
+
     ActionModal.open("Success", "Cmon minted successfully!", 'success')
 
   } catch (err) {
@@ -528,7 +567,9 @@ async function MintToken() {
 }
 
 export {
+  MintTokenOwner,
   contract,
+  provider,
   MintToken,
   NextClaim,
   MintNft,
@@ -556,5 +597,5 @@ export {
   swapWmon,
   swapTokens,
   loadPortfolios,
-  isConnected
+
 };

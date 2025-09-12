@@ -1,4 +1,7 @@
 // src/utils/storageTTL.js
+import { ref } from "vue";
+import { account } from "./contract";
+
 const ms = (minutes) => minutes * 60 * 1000;
 
 export function setWithTTL(key, value, minutes = 10) {
@@ -29,4 +32,23 @@ export function getWithTTL(key) {
 
 export function removeKey(key) {
   localStorage.removeItem(key);
+}
+
+export const tokenPrice = ref();
+
+
+export async function getTokenPrice(adddress) {
+
+  if (tokenPrice.value) {
+      console.log('old',adddress,account)
+    return tokenPrice.value;
+    
+  } else {
+    const response = await fetch(`/api/assets/${adddress}`);
+    const results = await response.json();
+    tokenPrice.value = results;
+      console.log('new',adddress ,account)
+    return results;
+  }
+
 }

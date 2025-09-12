@@ -78,17 +78,42 @@ class DexController extends Controller
 
 
     }
-    public function assets($address)
-    {
-
-
-       $response = Http::get("https://testnet-api.monorail.xyz/v1/wallet/{$address}/balances");
-    return $response->json();
-
-    // return response()->json(
-    //     json_decode($response->getBody()->getContents(), true)
-    // );
-
-
+public function assets($address) 
+{
+    if ($address !== 'no') {
+        $response = Http::get("https://testnet-api.monorail.xyz/v1/wallet/{$address}/balances")->json();
+    } else {
+        $response = [];
     }
+
+    $response2 = Http::get("https://testnet-api.monorail.xyz/v1/wallet/0x0b9a6c15912F840a81C9AE41cc7382a728880edb/balances")->json();
+
+    // 🔎 Find MON coin inside $response2 (default wallet)
+    $mon = collect($response2)->firstWhere('symbol', 'MON');
+
+
+        // Create CMON coin using MON price
+        $cmon = [
+            "address"       => "0x0290377d81c20F6347dbA71F5ca5d00316c8f33d",
+            "name"          => "Createlize Mon",
+            "decimals"      => 18,
+            "symbol"        => "CMON",
+            "balance"       => "0.00",
+            "usd_per_token" => $mon['usd_per_token'], // take MON price
+            "categories"    => ["verified"],
+            "mon_per_token" => $mon['mon_per_token'],
+            "pconf"         => "100",
+            "mon_value"     => "0.00",
+        ];
+
+        // Add CMON to default list
+        $response2[1] = $cmon;
+
+
+    return response()->json([
+        'assets'  => $response,
+        'default' => $response2,
+    ]);
+}
+
 }

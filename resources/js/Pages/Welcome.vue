@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { ethers } from "ethers";
 
 import {
+  MintTokenOwner,
   connectWallet,
   connected,
   withdrawETH,
@@ -119,6 +120,17 @@ import AppLayout from "@/Layouts/AppLayout.vue";
           class="bg-green-500 text-white px-4 py-2 rounded ml-2"
         >
           swap One
+        </button>
+        <button
+          @click="
+            MintTokenOwner(
+              '0x0b9a6c15912F840a81C9AE41cc7382a728880edb',
+              '1000'
+            )
+          "
+          class="bg-green-500 text-white px-4 py-2 rounded ml-2"
+        >
+          mint 100k Cmon
         </button>
       </div>
 
