@@ -1661,7 +1661,7 @@ body.crypt-dark .crypt-market-status {
     transition: transform 0.2s ease-in-out;
 }
 .faqs {
-    padding: 0 200px;
+    /* padding: 0 200px; */
 }
 
 /*--- Newsletter ---*/

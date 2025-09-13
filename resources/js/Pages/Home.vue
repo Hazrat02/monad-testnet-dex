@@ -9,7 +9,10 @@ import {
   disconnectWallet,
   setGreeting,
 } from "@/contract.js";
+function newsLetter(){
+      ActionModal.open("Success", "Thank you for subscribing to our newsletter. We’ll be in touch with you soon.", 'success')
 
+}
 onMounted(() => {
   // Create the script element
   const script = document.createElement("script");
@@ -116,9 +119,8 @@ onMounted(() => {
                 <button
                   v-else
                   class="btn btn-lg shiny-cta signup-btn"
-             @click="setGreeting('hi monad')"
+                  @click="setGreeting('hi monad')"
                 >
-                  
                   Say GMonad
                 </button>
               </div>
@@ -262,7 +264,8 @@ onMounted(() => {
         <div class="row mt-5 pt-2">
           <div class="text-center in-view">
             <h2>
-              Explore Crypt <span class="gd-text">Products & Services</span>
+              Explore Createlize
+              <span class="gd-text">Products & Services</span>
             </h2>
           </div>
         </div>
@@ -270,10 +273,10 @@ onMounted(() => {
           <div class="col-12 col-sm-12 col-md-12 col-lg-4 mb-4">
             <div class="card d-sm-flex flex-sm-row gap-3 p-4">
               <div class="in-view">
-                <h4 class="card-title fw-medium mb-3">Spot Trading</h4>
+                <h4 class="card-title fw-medium mb-3">Token Swap</h4>
                 <p class="card-text">
-                  The purpose of lorem ipsum is to create a natural looking
-                  block of text sentence, paragraph, page, etc.
+                  Instantly exchange your tokens with secure, fast, and low-fee
+                  swaps powered by Createlize.
                 </p>
               </div>
               <img
@@ -287,10 +290,10 @@ onMounted(() => {
           <div class="col-12 col-sm-12 col-md-12 col-lg-4 mb-4">
             <div class="card d-sm-flex flex-sm-row gap-3 p-4">
               <div class="in-view">
-                <h4 class="card-title fw-medium mb-3">Buy Crypto</h4>
+                <h4 class="card-title fw-medium mb-3">Staking</h4>
                 <p class="card-text">
-                  The purpose of lorem ipsum is to create a natural looking
-                  block of text sentence, paragraph, page, etc.
+                  Stake your tokens and earn rewards while supporting the
+                  Createlize ecosystem growth.
                 </p>
               </div>
               <img
@@ -304,10 +307,10 @@ onMounted(() => {
           <div class="col-12 col-sm-12 col-md-12 col-lg-4 mb-4">
             <div class="card d-sm-flex flex-sm-row gap-3 p-4">
               <div class="in-view">
-                <h4 class="card-title fw-medium mb-3">Trading Bot</h4>
+                <h4 class="card-title fw-medium mb-3">Mint Tokens</h4>
                 <p class="card-text">
-                  The purpose of lorem ipsum is to create a natural looking
-                  block of text sentence, paragraph, page, etc.
+                  Easily mint new tokens and expand your digital asset portfolio
+                  with Createlize.
                 </p>
               </div>
               <img
@@ -323,10 +326,10 @@ onMounted(() => {
           <div class="col-12 col-sm-12 col-md-12 col-lg-4 mb-4">
             <div class="card d-sm-flex flex-sm-row gap-3 p-4">
               <div class="in-view">
-                <h4 class="card-title fw-medium mb-3">Crypt Earn</h4>
+                <h4 class="card-title fw-medium mb-3">Claim NFT</h4>
                 <p class="card-text">
-                  The purpose of lorem ipsum is to create a natural looking
-                  block of text.
+                  Unlock and claim exclusive NFTs through Createlize special
+                  events and campaigns.
                 </p>
               </div>
               <img
@@ -340,10 +343,10 @@ onMounted(() => {
           <div class="col-12 col-sm-12 col-md-12 col-lg-4 mb-4">
             <div class="card d-sm-flex flex-sm-row gap-3 p-4">
               <div class="in-view">
-                <h4 class="card-title fw-medium mb-3">Margin Trading</h4>
+                <h4 class="card-title fw-medium mb-3">Wallet Analysis</h4>
                 <p class="card-text">
-                  The purpose of lorem ipsum is to create a natural looking
-                  block of text.
+                  Track, analyze, and manage your wallet activity with real-time
+                  insights and reports.
                 </p>
               </div>
               <img
@@ -357,10 +360,10 @@ onMounted(() => {
           <div class="col-12 col-sm-12 col-md-12 col-lg-4 mb-4">
             <div class="card d-sm-flex flex-sm-row gap-3 p-4">
               <div class="in-view">
-                <h4 class="card-title fw-medium mb-3">Futures Trading</h4>
+                <h4 class="card-title fw-medium mb-3">More Coming Soon</h4>
                 <p class="card-text">
-                  The purpose of lorem ipsum is to create a natural looking
-                  block of text.
+                  Createlize is constantly evolving — stay tuned for new
+                  features and services.
                 </p>
               </div>
               <img
@@ -373,6 +376,36 @@ onMounted(() => {
           </div>
         </div>
       </section>
+
+      <section class="section-begin">
+        <div class="section-begin__container container">
+          <div class="section-begin__columns">
+            <div class="section-begin__column">
+              <div class="section-begin__image">
+                <img src="img/nft-2.png" alt="" />
+              </div>
+            </div>
+            <div class="section-begin__column">
+              <div class="section-begin__wrapper">
+                <h2 class="section-begin__title">Createlize Nads</h2>
+                <p class="section-begin__text">
+                  Cretelize Mon is the premier launch and event calendar for the
+                  expanding world of Non-Fungible Tokens. We showcase the most
+                  exciting NFT drops, releases, and events across leading
+                  platforms and marketplaces, helping the community stay
+                  informed and engaged with the latest trends in the NFT space..
+                </p>
+                <Link
+                  :href="route('nft')"
+                  class="btn btn-lg shiny-cta signup-btn"
+                  >Mint & Explore</Link
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- How to get started -->
       <section class="container mt-0 mt-sm-5 pt-0 pt-sm-4">
         <div class="row align-items-center">
@@ -380,8 +413,9 @@ onMounted(() => {
             <div class="text-left pb-4">
               <h2>How to Get Started</h2>
               <p class="crypt-grayscale-500 mt-3">
-                You can receive your payments in your digital wallet in crypto
-                or <br />in your bank account in fiat — it’s your choice.
+                Join Createlize in just a few steps and start swapping, staking,
+                minting tokens, claiming NFTs, and tracking your wallet with
+                ease.
               </p>
             </div>
             <div class="accordion">
@@ -395,7 +429,7 @@ onMounted(() => {
                     aria-expanded="true"
                     aria-controls="collapseFive"
                   >
-                    1. Create an account
+                    1. Create Your Account
                   </button>
                 </h2>
                 <div
@@ -405,7 +439,8 @@ onMounted(() => {
                   data-bs-parent="#accordionExample"
                 >
                   <div class="accordion-body">
-                    Pick one of 50 000+ supported currency pairs from the list.
+                    Sign up on Createlize to access swapping, staking, minting,
+                    and NFT claiming features.
                   </div>
                 </div>
               </div>
@@ -419,7 +454,7 @@ onMounted(() => {
                     aria-expanded="false"
                     aria-controls="collapseSix"
                   >
-                    2. Enter swap details
+                    2. Connect Your Wallet
                   </button>
                 </h2>
                 <div
@@ -429,8 +464,8 @@ onMounted(() => {
                   data-bs-parent="#accordionExample"
                 >
                   <div class="accordion-body">
-                    Confirm details and send your assets to the generated
-                    address.
+                    Link your crypto wallet to start swapping tokens, staking,
+                    or minting new assets securely.
                   </div>
                 </div>
               </div>
@@ -444,7 +479,7 @@ onMounted(() => {
                     aria-expanded="false"
                     aria-controls="collapseSeven"
                   >
-                    3. Trade your crypto
+                    3. Start Exploring
                   </button>
                 </h2>
                 <div
@@ -454,7 +489,8 @@ onMounted(() => {
                   data-bs-parent="#accordionExample"
                 >
                   <div class="accordion-body">
-                    Receive exchanged crypto with the best possible rate.
+                    Swap tokens, stake for rewards, claim exclusive NFTs, and
+                    analyze your wallet—all in one place.
                   </div>
                 </div>
               </div>
@@ -470,6 +506,7 @@ onMounted(() => {
           </div>
         </div>
       </section>
+
       <!-- The best rate always -->
       <section class="container mt-4 mt-sm-5 pt-0 pt-sm-4">
         <h2 class="text-center">The Best Rate Always</h2>
@@ -485,8 +522,8 @@ onMounted(() => {
                 />
                 <h4 class="card-title mt-4 mb-2">No Hidden Fees</h4>
                 <p class="card-text">
-                  The purpose of lorem ipsum is to create a natural looking
-                  block of text sentence, paragraph.
+                  Enjoy transparent transactions on Createlize with zero hidden
+                  charges — what you see is what you pay.
                 </p>
               </div>
             </div>
@@ -502,8 +539,8 @@ onMounted(() => {
                 />
                 <h4 class="card-title mt-4 mb-2">Competitive Rates</h4>
                 <p class="card-text">
-                  The purpose of lorem ipsum is to create a natural looking
-                  block of text sentence, paragraph.
+                  Swap, stake, and mint with the most competitive rates powered
+                  by Createlize smart technology.
                 </p>
               </div>
             </div>
@@ -519,13 +556,14 @@ onMounted(() => {
                 />
                 <h4 class="card-title mt-4 mb-2">Secure Asset Storage</h4>
                 <p class="card-text">
-                  The purpose of lorem ipsum is to create a natural looking
-                  block of text sentence, paragraph.
+                  Keep your tokens and NFTs safe with advanced wallet analysis
+                  and industry-leading security protocols.
                 </p>
               </div>
             </div>
           </div>
         </div>
+
         <div class="row">
           <div class="col-md-8 mb-3">
             <div class="card p-4 bg-5">
@@ -537,9 +575,9 @@ onMounted(() => {
                 </h5>
                 <a
                   class="btn btn-editor btn-info mt-3"
-                  href="exchange.html"
+                 
                   role="button"
-                  >Start Copy Trading</a
+                  >Coming soon...</a
                 >
                 <div class="pt-2">
                   <div class="attributes">
@@ -585,9 +623,9 @@ onMounted(() => {
                         class=""
                         alt=""
                         style="width: 44px"
-                        src="https://crypt.tophivetheme.com/demo/images/coin/link.svg"
+                        src="img/monad.svg"
                       />
-                      Chainlink
+                      Monad
                     </div>
                   </div>
                 </div>
@@ -742,11 +780,10 @@ onMounted(() => {
               class="card card-border px-4 pb-0 gd-bg align-content-between h-100"
             >
               <h4 class="card-title mt-3 mb-2">
-                Faster Trading, Better Assets
+                Faster Exploring, Better Assets
               </h4>
               <p class="card-text pb-3">
-                The purpose of lorem ipsum is to create a natural looking block
-                of text sentence.
+                Access the Createlize Mon dApp seamlessly through your wallet browser — simply copy our dApp link, open it in Wallet Discover, and connect instantly.
               </p>
               <div class="crypt-scroll mt-2">
                 <div class="crypt-scrolling scroll-right">
@@ -836,249 +873,118 @@ onMounted(() => {
           </div>
         </div>
       </section>
-      <!-- Benefits -->
-      <section class="container mt-4 mt-sm-5 pt-0 pt-sm-4">
-        <div class="text-center">
-          <h2>
-            Benefits of <br />Buying Crypto with
-            <span class="gd-text">Every Trader</span>
-          </h2>
-          <p class="card-text crypt-grayscale-500 mt-3">
-            We eliminate obstacles that stand in the way of your success.
-          </p>
-        </div>
-        <div class="row pt-5">
-          <div class="col-12 col-md-6 mb-3">
-            <div class="card p-4 pt-0 pe-0 bg-3 in-view h-100">
-              <div class="">
-                <img
-                  class="float-end"
-                  src="https://crypt.tophivetheme.com/demo/images/features/candles.png"
-                  alt=""
-                  width="260"
-                />
-              </div>
-              <h3 class="fw-bold text-dark">New to Trading?</h3>
-              <p class="card-text text-dark text-opacity-75 pe-4">
-                Take advantage of our promotions and demo account to practice
-                risk-free. Master the markets with insights from our team of
-                more than 70 expert educators.
-              </p>
-              <div class="d-flex mt-4">
-                <a class="btn btn-editor btn-info mb-2" href="#!" role="button"
-                  >Start With Confidence</a
-                >
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-md-6 mb-3">
-            <div class="card p-4 pb-0 bg-1 in-view">
-              <h3 class="fw-bold text-dark">Experienced Trader?</h3>
-              <p class="card-text text-dark text-opacity-75 pe-4">
-                Enjoy a premium experience designed for seasoned traders with
-                rewarding benefits including access to the widest selection
-                trading tools.
-              </p>
-              <div class="d-flex mt-4">
-                <a
-                  class="btn btn-editor btn-primary mb-2"
-                  href="#!"
-                  role="button"
-                  >Discover Our Offering</a
-                >
-              </div>
-              <div class="float-end">
-                <img
-                  class="float-end"
-                  src="https://crypt.tophivetheme.com/demo/images/features/experienced-trade.png"
-                  alt=""
-                  width="260"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Blog -->
-      <section class="container mt-4 mt-sm-5 pt-0 pt-sm-4">
-        <div class="text-center">
-          <h2>Stay Updated with Our Blog</h2>
-        </div>
-        <div class="row pt-5">
-          <div class="col-12 col-md-4 mb-4">
-            <a href="blog-single.html" class="blog-card">
-              <div
-                class="thumb"
-                style="background-image: url(images/blog/blog-12.jpg)"
-              ></div>
-              <div class="meta p-3">
-                <span class="badge badge text-uppercase text-bg-success"
-                  >Metaverse</span
-                >
-                <h5 class="title-link">
-                  FOMC holds rates steady, Bitcoin and Ethereum price decline
-                </h5>
-                <p class="crypt-grayscale-600">
-                  2 mins read / updated on Tue Dec 29 2024
-                </p>
-              </div>
-            </a>
-          </div>
-          <div class="col-12 col-md-4 mb-4">
-            <a href="blog-single.html" class="blog-card">
-              <div
-                class="thumb"
-                style="background-image: url(images/blog/blog-13.jpg)"
-              ></div>
-              <div class="meta p-3">
-                <span class="badge badge text-uppercase text-bg-info"
-                  >Ethereum</span
-                >
-                <h5 class="title-link">
-                  Restaking with ETHx | Boosted reward programs
-                </h5>
-                <p class="crypt-grayscale-600">
-                  4 mins read / updated on Fri Oct 15 2024
-                </p>
-              </div>
-            </a>
-          </div>
-          <div class="col-12 col-md-4 mb-4">
-            <a href="blog-single.html" class="blog-card">
-              <div
-                class="thumb"
-                style="background-image: url(images/blog/blog-14.jpg)"
-              ></div>
-              <div class="meta p-3">
-                <span class="badge badge text-uppercase text-bg-warning"
-                  >Trading</span
-                >
-                <h5 class="title-link">
-                  Wrapping tokens enables broader across the Web3 ecosystem
-                </h5>
-                <p class="crypt-grayscale-600">
-                  5 mins read / updated on Sat May 22 2024
-                </p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
+
       <!-- FAQ -->
-      <section class="container faqs mt-4 mt-sm-5 pt-0 pt-sm-4">
-        <h2 class="text-center">FAQ</h2>
-        <div class="accordion pt-5 pb-4 in-view">
-          <div class="accordion-item">
-            <div class="accordion-header" id="headingOne">
-              <button
-                class="accordion-button fs-5"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseOne"
-                aria-expanded="true"
-                aria-controls="collapseOne"
-              >
-                What are the benefits of staking?
-              </button>
-            </div>
-            <div
-              id="collapseOne"
-              class="accordion-collapse collapse show"
-              aria-labelledby="headingOne"
-              data-bs-parent="#accordionExample"
-            >
-              <div class="accordion-body">
-                The passage experienced today it's seen all around the web; on
-                templates, websites, and stock designs. Use our generator to get
-                your own, or read on for the authoritative history of lorem
-                ipsum.
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <div class="accordion-header" id="headingTwo">
-              <button
-                class="accordion-button fs-5 collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseTwo"
-                aria-expanded="false"
-                aria-controls="collapseTwo"
-              >
-                What is a blockchain API?
-              </button>
-            </div>
-            <div
-              id="collapseTwo"
-              class="accordion-collapse collapse"
-              aria-labelledby="headingTwo"
-              data-bs-parent="#accordionExample"
-            >
-              <div class="accordion-body">
-                Letraset used it on their dry-transfer sheets, and again during
-                the 90s as desktop publishers bundled the text with their
-                software. Today it's seen all around the web; on templates,
-                websites, and stock designs. Use our generator to get your own,
-                or read on for the authoritative history of lorem ipsum.
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <div class="accordion-header" id="headingThree">
-              <button
-                class="accordion-button fs-5 collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseThree"
-                aria-expanded="false"
-                aria-controls="collapseThree"
-              >
-                How do I get blockchain API?
-              </button>
-            </div>
-            <div
-              id="collapseThree"
-              class="accordion-collapse collapse"
-              aria-labelledby="headingThree"
-              data-bs-parent="#accordionExample"
-            >
-              <div class="accordion-body">
-                The passage experienced a surge in popularity during the 1980s
-                when Letraset used it on their dry-transfer sheets, and again
-                during the 90s as desktop publishers bundled the text with their
-                software. Today it's seen all around the web on templates,
-                websites, and stock designs.
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <div class="accordion-header" id="headingFour">
-              <button
-                class="accordion-button fs-5 collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseFour"
-                aria-expanded="false"
-                aria-controls="collapseFour"
-              >
-                How do nodes work?
-              </button>
-            </div>
-            <div
-              id="collapseFour"
-              class="accordion-collapse collapse"
-              aria-labelledby="headingFour"
-              data-bs-parent="#accordionExample"
-            >
-              <div class="accordion-body">
-                The placeholder text, beginning with the line “Lorem ipsum dolor
-                sit amet, consectetur adipiscing elit”, looks like Latin because
-                in its youth, centuries ago, it was Latin.
-              </div>
-            </div>
-          </div>
+    <section class="container faqs mt-4 mt-sm-5 pt-0 pt-sm-4">
+  <h2 class="text-center">FAQ</h2>
+  <div class="accordion pt-5 pb-4 in-view">
+    <div class="accordion-item">
+      <div class="accordion-header" id="headingOne">
+        <button
+          class="accordion-button fs-5"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseOne"
+          aria-expanded="true"
+          aria-controls="collapseOne"
+        >
+          What are the benefits of staking on Createlize?
+        </button>
+      </div>
+      <div
+        id="collapseOne"
+        class="accordion-collapse collapse show"
+        aria-labelledby="headingOne"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body">
+          By staking your tokens on Createlize, you earn rewards while helping
+          to secure the network. Staking also provides opportunities for
+          long-term growth and passive income.
         </div>
-      </section>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" id="headingTwo">
+        <button
+          class="accordion-button fs-5 collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseTwo"
+          aria-expanded="false"
+          aria-controls="collapseTwo"
+        >
+          How does the token swap feature work?
+        </button>
+      </div>
+      <div
+        id="collapseTwo"
+        class="accordion-collapse collapse"
+        aria-labelledby="headingTwo"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body">
+          The swap feature allows you to instantly exchange one token for
+          another at competitive rates. Simply connect your wallet, choose your
+          tokens, and confirm the swap securely.
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" id="headingThree">
+        <button
+          class="accordion-button fs-5 collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseThree"
+          aria-expanded="false"
+          aria-controls="collapseThree"
+        >
+          Can I mint NFTs on Createlize?
+        </button>
+      </div>
+      <div
+        id="collapseThree"
+        class="accordion-collapse collapse"
+        aria-labelledby="headingThree"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body">
+          Yes! Createlize lets you mint unique NFTs directly from your wallet.
+          You can also claim exclusive drops and showcase your digital assets in
+          your wallet analysis dashboard.
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" id="headingFour">
+        <button
+          class="accordion-button fs-5 collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseFour"
+          aria-expanded="false"
+          aria-controls="collapseFour"
+        >
+          Is my wallet secure with Createlize?
+        </button>
+      </div>
+      <div
+        id="collapseFour"
+        class="accordion-collapse collapse"
+        aria-labelledby="headingFour"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body">
+          Absolutely. Createlize uses advanced encryption and decentralized
+          protocols to keep your assets safe. You stay in full control of your
+          private keys and funds.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
       <!-- Newsletter -->
       <section class="container mt-4 mt-sm-5 pt-0 pt-sm-4 pb-5 nl-bg">
         <div class="row newsletter justify-content-center" id="contact">
@@ -1091,11 +997,8 @@ onMounted(() => {
             </p>
           </div>
           <div class="newsletter-form newsletter text-center mt-4">
-            <p class="crypt-grayscale-400" id="distance">
-              Don't be shy. You are <span id="distance_text">0</span> pixels
-              away from hitting that button!
-            </p>
-            <form>
+  
+            <form @submit.prevent="newsLetter">
               <input
                 type="email"
                 maxlength="50"
@@ -1103,7 +1006,7 @@ onMounted(() => {
                 required
                 placeholder="Enter your email address"
               />
-              <button id="element" class="btn btn-lg shiny-cta signup-btn">
+              <button id="element" type="submit" class="btn btn-lg shiny-cta signup-btn">
                 Subscribe
               </button>
             </form>
@@ -1111,7 +1014,7 @@ onMounted(() => {
           <div
             class="d-flex flex-row justify-content-center align-items-center text-center gap-1 mt-3"
           >
-            <svg
+            <!-- <svg
               width="24"
               height="24"
               viewBox="0 0 18 18"
@@ -1131,10 +1034,7 @@ onMounted(() => {
                 stroke-linejoin="round"
               ></path>
             </svg>
-            <h6 class="crypt-grayscale-500 mb-0">
-              You are subscribing to all our networks
-              <a class="text-info text-link" href="#!">Select networks</a>
-            </h6>
+             -->
           </div>
         </div>
       </section>
@@ -1142,3 +1042,116 @@ onMounted(() => {
   </AppLayout>
 </template>
 
+<style scoped>
+.section-begin {
+  background-color: #211949;
+  position: relative;
+  overflow: hidden;
+}
+.section-begin::before {
+  content: "";
+  display: block;
+  width: 95%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-image: url(https://tf.bda.dev/mynt/img/section-begin-back.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom right;
+  z-index: 1;
+}
+@media (min-width: 768px) {
+  .section-begin::before {
+    width: 633px;
+  }
+}
+.section-begin__container {
+  padding: 80px 20px 70px 20px;
+}
+@media (min-width: 768px) {
+  .section-begin__container {
+    padding: 80px 20px 80px 60px;
+  }
+}
+@media (min-width: 1201px) {
+  .section-begin__container {
+    padding: 155px 20px 160px 130px;
+  }
+}
+.section-begin__columns {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+@media (min-width: 768px) {
+  .section-begin__columns {
+    flex-direction: row;
+  }
+}
+@media (min-width: 992px) {
+  .section-begin__column {
+    max-width: 460px;
+  }
+}
+@media (min-width: 768px) {
+  .section-begin__column:not(:last-child) {
+    margin-right: 80px;
+  }
+}
+@media (min-width: 1201px) {
+  .section-begin__column:not(:last-child) {
+    margin-right: 180px;
+  }
+}
+.section-begin__image {
+  background-color: #000303;
+  width: 180px;
+  height: 238px;
+  margin-bottom: 60px;
+  border-radius: 10px;
+  transform: rotate(-6deg);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .section-begin__image {
+    width: 270px;
+    height: 360px;
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 992px) {
+  .section-begin__image {
+    width: 300px;
+    height: 380px;
+  }
+}
+@media (min-width: 1201px) {
+  .section-begin__image {
+    width: 366px;
+    height: 483px;
+  }
+}
+.section-begin__image img {
+  width: auto;
+  height: 85%;
+}
+.section-begin__title {
+  color: #fcfcfc;
+}
+.section-begin__text {
+  color: #fcfcfc;
+  margin-bottom: 35px;
+}
+@media (min-width: 768px) {
+  .section-begin__text {
+    margin-bottom: 40px;
+  }
+}
+</style>
