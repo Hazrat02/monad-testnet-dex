@@ -207,12 +207,14 @@ async function connectWallet(walletName) {
 
     NextClaim.value = Number(time);
     connected.value = true;
+
     ActionModal.close()
 
 
 
   } catch (err) {
-    console.error("Wallet connection failed:", err);
+      ActionModal.open("Failed", "Wallet connection failed", 'error')
+
   }
 }
 
@@ -240,10 +242,15 @@ function disconnectWallet() {
 // Contract Calls
 // -----------------------------------
 async function setGreeting(newGreeting) {
+    ActionModal.open("setGreeting", "Accept request in the wallet", 'load')
+
   const fee = await contract.callFee();
   const tx = await contract.setGreeting(newGreeting, { value: fee });
   await tx.wait();
   greeting.value = await contract.greeting();
+
+ ActionModal.open("Success", "Thanks for start work on Createlize", 'success')
+
 }
 
 async function withdrawETH() {
@@ -486,6 +493,9 @@ async function loadPortfolios() {
 }
 
 async function MintNft() {
+
+      ActionModal.open("Minting", "Accept all request in the wallet", 'load')
+
   try {
     // Convert to wei
     const weiAmount = ethers.parseEther("0.25");
@@ -500,7 +510,8 @@ async function MintNft() {
 
     await tx.wait();
   } catch (err) {
-    console.error("MON deposit failed:", err);
+        ActionModal.open("failed", "MON deposit failed!Try again.", 'error')
+
   }
 
 
@@ -508,9 +519,14 @@ async function MintNft() {
   try {
     const tx = await contract.mintUserNFT(); // no amount param needed
     await tx.wait();
-    console.log("NFT minted successfully!");
+
+          ActionModal.open("Success", "NFT minted successfully!", 'success')
+
+
   } catch (err) {
-    console.error("NFT mint failed:", err);
+            ActionModal.open("failed", "NFT mint failed!Try again.", 'error')
+
+
   }
 }
 
