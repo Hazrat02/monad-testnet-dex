@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 250" width="800" height="250" role="img" aria-label="Uniswap logo (white)">
+  <!-- Unicorn Icon -->
+  <g transform="translate(20,20)" fill="#ffffff" stroke="none">
+    <path d="M60 30c-8-14-20-26-36-30 8 8 12 18 14 28-16-2-28 8-34 22-2 6-2 12-2 18 4-8 10-14 18-18 0 6 0 12 2 18 4 12 14 22 26 26 2 0 4 0 6 0-8-6-14-14-16-24 8 4 16 8 26 10 0-10-2-20-4-30 4 6 8 12 14 16-4-12-8-22-14-32z"/>
+    <path d="M72 92c-8 0-14 6-14 14s6 14 14 14c8 0 14-6 14-14s-6-14-14-14z"/>
+    <path d="M40 110c-6 0-10 4-10 10s4 10 10 10 10-4 10-10-4-10-10-10z"/>
+  </g>
+
+  <!-- Text -->
+  <g transform="translate(160,140)">
+    <text x="0" y="0" font-family="Arial, Helvetica, sans-serif" font-weight="600"
+          font-size="80" fill="#ffffff">Uniswap</text>
+  </g>
+</svg>

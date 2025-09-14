@@ -1,76 +1,66 @@
 <script setup>
-import { connected,MintToken,account,contract,NextClaim } from "@/contract";
+import { connected, MintToken, account, contract, NextClaim } from "@/contract";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { getWithTTL,setWithTTL } from "@/localstorage";
+import { getWithTTL, setWithTTL } from "@/localstorage";
 import { Head, Link } from "@inertiajs/vue3";
-import { ref, computed, onMounted, onUnmounted,watch  } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 
-
-
-
-
-
-
-
-const CLAIM_INTERVAL = 24 * 60 * 60 // 24 hours in seconds
-const secondsLeft = ref(CLAIM_INTERVAL)
-let timerInterval = null
+const CLAIM_INTERVAL = 24 * 60 * 60; // 24 hours in seconds
+const secondsLeft = ref(CLAIM_INTERVAL);
+let timerInterval = null;
 
 function startCountdown(targetTime) {
-  clearInterval(timerInterval)
+  clearInterval(timerInterval);
   const update = () => {
-    const now = Math.floor(Date.now() / 1000)
-    const diff = targetTime - now
-    secondsLeft.value = diff > 0 ? diff : 0
-    if (secondsLeft.value <= 0) clearInterval(timerInterval)
-  }
-  update() // run immediately
-  timerInterval = setInterval(update, 1000)
+    const now = Math.floor(Date.now() / 1000);
+    const diff = targetTime - now;
+    secondsLeft.value = diff > 0 ? diff : 0;
+    if (secondsLeft.value <= 0) clearInterval(timerInterval);
+  };
+  update(); // run immediately
+  timerInterval = setInterval(update, 1000);
 }
 
 async function fetchLastClaim() {
-  if (!contract || !account.value) return
+  if (!contract || !account.value) return;
 
-  const last = await contract.getLastClaim(account.value) // BigInt
-  const lastClaim = Number(last) // convert to Number
+  const last = await contract.getLastClaim(account.value); // BigInt
+  const lastClaim = Number(last); // convert to Number
 
   // store locally to persist across reloads
-  setWithTTL('lastClaimed', lastClaim)
+  setWithTTL("lastClaimed", lastClaim);
 
-  const targetTime = lastClaim + CLAIM_INTERVAL
-  startCountdown(targetTime)
+  const targetTime = lastClaim + CLAIM_INTERVAL;
+  startCountdown(targetTime);
 }
 
 // onMounted: first try local storage, fallback to blockchain
 onMounted(() => {
-  const storedLast = getWithTTL('lastClaimed')
+  const storedLast = getWithTTL("lastClaimed");
   if (storedLast) {
-    const targetTime = Number(storedLast) + CLAIM_INTERVAL
-    startCountdown(targetTime)
+    const targetTime = Number(storedLast) + CLAIM_INTERVAL;
+    startCountdown(targetTime);
   } else {
-    fetchLastClaim()
+    fetchLastClaim();
   }
-})
+});
 
 // watch for account or contract changes
-watch(NextClaim, fetchLastClaim, { immediate: true })
+watch(NextClaim, fetchLastClaim, { immediate: true });
 
 onUnmounted(() => {
-  clearInterval(timerInterval)
-})
+  clearInterval(timerInterval);
+});
 
 const formattedTime = computed(() => {
-  const sec = secondsLeft.value
-  const hrs = Math.floor(sec / 3600)
-  const mins = Math.floor((sec % 3600) / 60)
-  const secs = sec % 60
-  return `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`
-})
-
-
-
-
-
+  const sec = secondsLeft.value;
+  const hrs = Math.floor(sec / 3600);
+  const mins = Math.floor((sec % 3600) / 60);
+  const secs = sec % 60;
+  return `${hrs.toString().padStart(2, "0")}:${mins
+    .toString()
+    .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+});
 </script>
 <template>
   <AppLayout>
@@ -85,30 +75,30 @@ const formattedTime = computed(() => {
               >Earn Free</span
             >
             <h2 class="text-uppercase fw-medium mb-0 text-white">
-              Crypto Today
+              GMonad Today
             </h2>
             <p
-              class="col-md-8 col-lg-5 col-sm-12 text-white text-opacity-75 mb-3"
+              class="col-md-8 col-lg-5 col-sm-12 text-white text-opacity-75 mb-3 mt-3"
             >
-              You now have full access to all of Coin's features, and are in the
-              highest tier for transaction limits.
+              Mint 0.05 CMON Tokens Completely Free — Every 24 Hours You Get
+              Fresh Rewards Straight to Your Wallet! Start minting daily and
+              grow your CMON balance effortlessly.
             </p>
-            <a v-if="connected && Number(secondsLeft) === 0"
+            <a
+              v-if="connected && Number(secondsLeft) === 0"
               class="btn btn-lg shiny-cta"
-            @click="MintToken"
+              @click="MintToken"
               >Claim now</a
             >
-           
-            <button 
-            disabled
-         v-if="connected && Number(secondsLeft) > 0"
-            
+
+            <button
+              disabled
+              v-if="connected && Number(secondsLeft) > 0"
               class="btn btn-lg shiny-cta"
-            
-          
-              >Next Claim: {{formattedTime}}</button
             >
-                <button
+              Next Claim: {{ formattedTime }}
+            </button>
+            <button
               v-if="!connected"
               class="btn btn-lg shiny-cta signup-btn"
               data-bs-toggle="modal"
@@ -163,8 +153,7 @@ const formattedTime = computed(() => {
                   />
                 </svg>
                 <h6 class="text-white mb-0">
-                  <span class="text-info">Unlimited</span> Deposit & Withdrawal
-                  Limits
+                  <span class="text-info">Everyday</span> Claim reward
                 </h6>
               </div>
               <div class="d-flex flex-row align-items-center gap-1 mb-2">
@@ -189,7 +178,7 @@ const formattedTime = computed(() => {
                   />
                 </svg>
                 <h6 class="text-white mb-0">
-                  CryptCoin <span class="text-primary">Earn</span>
+                  Claim Fee <span class="text-primary">Free</span>
                 </h6>
               </div>
               <div class="d-flex flex-row align-items-center gap-1 mb-2">
@@ -214,7 +203,7 @@ const formattedTime = computed(() => {
                   />
                 </svg>
                 <h6 class="text-white mb-0">
-                  <span class="text-info">Enhanced </span>due dilligence
+                  <span class="text-info">Swapable </span>On Createlize
                 </h6>
               </div>
             </div>
@@ -224,158 +213,39 @@ const formattedTime = computed(() => {
     </div>
     <!-- Card -->
 
-    <div style="margin-bottom: 50vW;"
-      class="modal fade"
-      id="CuponCrypto"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-hidden="true"
+    <!-- Simple Earn Table -->
+    <div
+      class="tab-pane fade show container"
+      id="simple-earn-tab-pane"
+      role="tabpanel"
+      aria-labelledby="simple-earn-tab"
+      tabindex="0"
     >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0 mt-2 d-flex">
-            <button
-              type="button"
-              class="btn-close text-reset close-notify align-items-center justify-content-center"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            >
-              <svg
-                class="close-notify"
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.5 4.5L4.5 13.5"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="table table-dark mb-0">
+          <thead>
+            <tr class="mb-0">
+              <th scope="col" class="underline">Minting Date</th>
+              <th scope="col" class="underline">Total mint</th>
+              <th scope="col" class="underline">Total Amount</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="align-middle">
+              <td colspan="6" class="no-orders text-center">
+                <img
+                  src="https://crypt.tophivetheme.com/demo/images/empty.svg"
+                  alt="no-orders"
                 />
-                <path
-                  d="M4.5 4.5L13.5 13.5"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="d-flex flex-column mb-3 text-center">
-              <h2 class="fw-bold text-info mb-3">
-                <span class="crypt-grayscale-300">Connecting..</span>
-              </h2>
-              <p class="crypt-grayscale-500">
-                Accept connection request in the wallet
-              </p>
-            </div>
-            <div class="mt-3 mb-4 p-3 row justify-content-center">
-              <div class="spinner-wrapper" role="status" aria-label="Loading">
-                <div class="spinner"></div>
-                <img class="circle-img" src="img/circle-logo.png" alt="Logo" />
-              </div>
-            </div>
-           
-          </div>
-        </div>
+                <p class="crypt-grayscale-600 pb-4">Coming Soon..</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <!-- <div
-      class="modal fade"
-      id="CuponCrypto"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0 mt-2 d-flex">
-            <button
-              type="button"
-              class="btn-close text-reset close-notify align-items-center justify-content-center"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            >
-              <svg
-                class="close-notify"
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.5 4.5L4.5 13.5"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M4.5 4.5L13.5 13.5"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="d-flex flex-column mb-3 text-center">
-              <h6 class="text-light fs-6 fw-bold mb-4">🎉You have received</h6>
-              <h2 class="fw-bold text-info mb-3">
-                1 <span class="crypt-grayscale-300">coupon(s)</span>
-              </h2>
-              <p class="crypt-grayscale-500">
-                Use the coupon from
-                <span class="text-warning">Create Trading Bot</span>
-              </p>
-            </div>
-            <div class="cupons mt-3 mb-4 p-3">
-              <div class="d-flex align-items-center py-2">
-                <div class="flex">
-                  <span class="text-dark fs-2 fw-bold">30%</span>
-                  <div class="text-dark fs-6">OFF</div>
-                </div>
-                <div class="vr mx-3"></div>
-                <div class="flex">
-                  <div class="text-dark fs-5 fw-bold mb-1">
-                    $100 TradingBot Coupon
-                  </div>
-                  <p class="text-dark text-opacity-75 mb-0">
-                    Expires on 2024/12/15 (UTC)
-                  </p>
-                </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <p class="text-dark text-sm mb-0">
-                  Applicable to all trading bots
-                </p>
-                <button class="btn btn-editor circle btn-warning" type="button">
-                  Use now
-                </button>
-              </div>
-            </div>
-            <div class="d-grid text-center gap-3 mt-3 mb-3">
-              <a class="btn btn-lg btn-primary" href="#!" role="button"
-                >Claim</a
-              >
-              <small class="text-dark crypt-grayscale-600 mb-0"
-                >Manage rewards programs anytime in Settings</small
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </AppLayout>
 </template>
 

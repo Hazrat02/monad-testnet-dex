@@ -5,10 +5,11 @@ import { setWithTTL, removeKey, tokenPrice } from "./localstorage";
 // const contractAddress = "0xA2b4117FEf6E40f73054a60B45552959f6476a68";
 const contractAddress = "0x7721285afBB74f5f95E2a15ceB8fd189c61451bc";
 const tokenAddress = "0x0000000000000000000000000000000000000000";
+const stakeAddress = "0x0290377d81c20F6347dbA71F5ca5d00316c8f33d";
 
 // Usage
 const zero = '0x0000000000000000000000000000000000000000';      // "0x0000000000000000000000000000000000000000"
-const max = 2 ^ 256 - 1;       // 2^256 - 1
+
 
 const contractABI = [
   // Public variables (view)
@@ -68,6 +69,9 @@ const ERC20ABI = [
   "function decimals() view returns (uint8)"
 ];
 
+
+
+
 let provider;
 let signer;
 let contract;
@@ -75,30 +79,21 @@ let contract;
 
 
 
-// const greeting = ref("");
-// const callFee = ref("");
-// const account = ref("");
-// const connected = ref("");
 
 
 const connected = ref(false);
 const account = ref("");
+const balance = ref("0.00");
+const Cmon = ref("0.00");
 const greeting = ref("");
 const callFee = ref("0.002");
-// const tokenAddress = ref("");
 const tokenA = ref("");
 const tokenB = ref("");
 const amountA = ref(0);
 const swapRate = ref(0);
 const NextClaim = ref(24 * 60 * 60);
-
 const userPortfolio = ref([]);
 const contractPortfolio = ref([]);
-
-
-
-
-
 
 
 async function connectWallet(walletName) {
@@ -109,10 +104,6 @@ async function connectWallet(walletName) {
     const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl)
     modal.hide()
   }
-
-
-
-
 
   try {
     if (!window.ethereum) {
@@ -133,15 +124,6 @@ async function connectWallet(walletName) {
         ethProvider = window.bitkeep.ethereum;
         break;
 
-      // case "coinbase":
-      //   if (!window.ethereum.isCoinbaseWallet) alert("Coinbase Wallet not found!");
-      //   ethProvider = window.ethereum;
-      //   break;
-
-      // case "rainbow":
-      //   // Rainbow injects a normal ethereum provider, check for window.ethereum
-      //   ethProvider = window.ethereum;
-      //   break;
 
       default:
         alert("Unsupported wallet!");
@@ -152,13 +134,15 @@ async function connectWallet(walletName) {
     // Connect provider
     // -------------------------
 
+
     provider = new ethers.BrowserProvider(ethProvider);
     await provider.send("eth_requestAccounts", []);
     signer = await provider.getSigner();
 
     tokenPrice.value = '';
     account.value = await signer.getAddress();
-
+    const balanceW = await provider.getBalance(account.value);
+     balance.value = ethers.formatEther(balanceW);
 
     setWithTTL('address', { account: account.value, platform: walletName });
 
@@ -198,15 +182,23 @@ async function connectWallet(walletName) {
     // Attach Contract
     // -------------------------
     contract = new ethers.Contract(contractAddress, contractABI, signer);
+    const stakeContract = new ethers.Contract(stakeAddress, ERC20ABI, provider);
+      const Cbalance = await stakeContract.balanceOf(account.value);
+
+
+        Cmon.value = ethers.formatUnits(Cbalance, 18);
     greeting.value = await contract.greeting();
     callFee.value = (await contract.callFee()).toString();
     const time = await contract.getLastClaim(account.value);
 
-    const balance = await contract.totalTokenBalance('0x0290377d81c20F6347dbA71F5ca5d00316c8f33d');
-    console.log('dsd', balance);
 
     NextClaim.value = Number(time);
     connected.value = true;
+
+
+
+
+
 
     ActionModal.close()
 
@@ -234,6 +226,8 @@ function disconnectWallet() {
   greeting.value = "";
   callFee.value = "";
   connected.value = false;
+  balance.value ="0.00";
+  Cmon.value ="0.00";
   removeKey('address');
 }
 
@@ -324,8 +318,7 @@ async function swapToken(tokenA, tokenB, amountA, amountB) {
   try {
     const decimalsA = tokenA === zero ? 18 : await getDecimals(tokenA);
     const decimalsB = tokenB === zero ? 18 : await getDecimals(tokenB);
-    // const decimalsA = tokenA === zero ? 18 : 18;
-    // const decimalsB = tokenB === zero ? 18 : 18;
+  
 
     const parsedAmountA = ethers.parseUnits(amountA.toString(), decimalsA);
     const parsedAmountB = ethers.parseUnits(amountB.toString(), decimalsB);
@@ -352,6 +345,62 @@ async function swapToken(tokenA, tokenB, amountA, amountB) {
     );
     await tx.wait();
     ActionModal.open("Success", "Swap successful!", 'success')
+    return true
+
+  } catch (err) {
+    console.log(err)
+    let reason = "Transaction failed";
+
+    // Try to extract reason safely
+    if (err.reason) {
+      reason = err.reason;
+    } else if (err.error && err.error.message) {
+      reason = err.error.message;
+    } else if (err.shortMessage) {
+      reason = err.shortMessage;
+    } else if (err.cause && err.cause.reason) {
+      reason = err.cause.reason;
+    } else if (err.message) {
+      reason = err.message;
+    }
+
+    ActionModal.open("Failed", reason, 'error')
+    return false
+  }
+
+}
+async function stakeToken(tokenA, tokenB, amountA, amountB,type) {
+  ActionModal.open(type, "Accept all request in the wallet", 'load')
+
+  try {
+    const decimalsA = tokenA === zero ? 18 : await getDecimals(tokenA);
+    const decimalsB = tokenB === zero ? 18 : await getDecimals(tokenB);
+
+
+    const parsedAmountA = ethers.parseUnits(amountA.toString(), decimalsA);
+    const parsedAmountB = ethers.parseUnits(amountB.toString(), decimalsB);
+
+    // Approve ERC20 tokenA if not native
+    if (tokenA !== zero) {
+      const tokenAContract = new ethers.Contract(tokenA, ["function approve(address spender, uint256 amount) public returns (bool)",
+        "function allowance(address owner, address spender) public view returns (uint256)"], signer);
+      const allowance = await tokenAContract.allowance(await signer.getAddress(), contractAddress);
+      if (allowance < parsedAmountA) {
+        const approveTx = await tokenAContract.approve(contractAddress, ethers.MaxUint256);
+        await approveTx.wait();
+      }
+    }
+
+    // Call swap
+    const tx = await contract.swap(
+      tokenA,
+      tokenB,
+      parsedAmountA,
+      parsedAmountB,
+      { value: tokenA === zero ? parsedAmountA : 0 }
+    );
+    await tx.wait();
+    ActionModal.open("Success", type + " successful!", 'success')
     return true
 
   } catch (err) {
@@ -591,14 +640,12 @@ export {
   MintNft,
   connected,
   account,
+   balance,
+   Cmon,
   greeting,
   callFee,
   userPortfolio,
   contractPortfolio,
-  tokenA,
-  tokenB,
-  amountA,
-  swapRate,
   connectWallet,
   disconnectWallet,
   setGreeting,
@@ -613,5 +660,6 @@ export {
   swapWmon,
   swapTokens,
   loadPortfolios,
+  stakeToken
 
 };

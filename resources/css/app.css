@@ -1565,6 +1565,7 @@ body.crypt-dark .crypt-market-status {
 }
 .navbar-toggler {
     color: var(--color-primary-400);
+
 }
 .input-group > :not(:first-child):not(.dropdown-menu):not(.form-control):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
     margin-left: calc(var(--bs-border-width) * -1);
@@ -4441,4 +4442,116 @@ body .text-sm {
     #fourth {
         order: 4;
     }
+}
+
+.section-begin {
+  background-color: #211949;
+  position: relative;
+  overflow: hidden;
+}
+.section-begin::before {
+  content: "";
+  display: block;
+  width: 95%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-image: url(https://tf.bda.dev/mynt/img/section-begin-back.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom right;
+  z-index: 1;
+}
+@media (min-width: 768px) {
+  .section-begin::before {
+    width: 633px;
+  }
+}
+.section-begin__container {
+  padding: 80px 20px 70px 20px;
+}
+@media (min-width: 768px) {
+  .section-begin__container {
+    padding: 80px 20px 80px 60px;
+  }
+}
+@media (min-width: 1201px) {
+  .section-begin__container {
+    padding: 155px 20px 160px 130px;
+  }
+}
+.section-begin__columns {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+@media (min-width: 768px) {
+  .section-begin__columns {
+    flex-direction: row;
+  }
+}
+@media (min-width: 992px) {
+  .section-begin__column {
+    max-width: 460px;
+  }
+}
+@media (min-width: 768px) {
+  .section-begin__column:not(:last-child) {
+    margin-right: 80px;
+  }
+}
+@media (min-width: 1201px) {
+  .section-begin__column:not(:last-child) {
+    margin-right: 180px;
+  }
+}
+.section-begin__image {
+  background-color: #000303;
+  width: 180px;
+  height: 238px;
+  margin-bottom: 60px;
+  border-radius: 10px;
+  transform: rotate(-6deg);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .section-begin__image {
+    width: 270px;
+    height: 360px;
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 992px) {
+  .section-begin__image {
+    width: 300px;
+    height: 380px;
+  }
+}
+@media (min-width: 1201px) {
+  .section-begin__image {
+    width: 366px;
+    height: 483px;
+  }
+}
+.section-begin__image img {
+  width: auto;
+  height: 85%;
+}
+.section-begin__title {
+  color: #fcfcfc;
+}
+.section-begin__text {
+  color: #fcfcfc;
+  margin-bottom: 35px;
+}
+@media (min-width: 768px) {
+  .section-begin__text {
+    margin-bottom: 40px;
+  }
 }

@@ -1,22 +1,13 @@
 
 
 <script setup>
-import { connected, swapToken, provider, account } from "@/contract";
+import { connected, swapToken, provider, account,Cmon } from "@/contract";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { getTokenPrice } from "@/localstorage";
 import { Head, Link } from "@inertiajs/vue3";
-import { ethers } from "ethers";
 import { ref, onMounted, computed, watch } from "vue";
 
-const cmonAddress = "0x0290377d81c20F6347dbA71F5ca5d00316c8f33d"; // CMON contract
-const cmonAbi = [
-  "function balanceOf(address account) external view returns (uint256)",
-  "function decimals() view returns (uint8)", // optional, for formatting
-];
-const cmonContract = new ethers.Contract(cmonAddress, cmonAbi, provider);
 
-// Example usage
-getUserCmonBalance("0xYourUserAddressHere");
 
 const balances = ref([]);
 const Dbalances = ref([]);
@@ -43,17 +34,6 @@ const selectedTo = ref({
   mon_value: "0.00",
 });
 
-async function getUserCmonBalance(userAddress) {
-  try {
-    const balance = await cmonContract.balanceOf(userAddress);
-
-    // Convert balance to human-readable format
-    const formattedBalance = ethers.formatUnits(balance, 18);
-    console.log(`User CMON balance: ${formattedBalance}`);
-
-    return formattedBalance;
-  } catch (err) {}
-}
 
 // Fetch balances function
 const fetchBalances = async () => {
@@ -79,7 +59,7 @@ const fetchBalances = async () => {
     }
 
     if (account.value) {
-      const Cmon = await getUserCmonBalance(account.value);
+    
 
       selectedFrom.value = results.assets.find((token) =>
         token.categories?.includes("native")
@@ -90,7 +70,7 @@ const fetchBalances = async () => {
       );
 
       if (cmonToken) {
-        cmonToken.balance = Cmon; // set user balance
+        cmonToken.balance = Cmon.value; // set user balance
         selectedTo.value = cmonToken; // keep the object, not just balance
 
         balances.value.push(cmonToken);
@@ -195,6 +175,8 @@ const convertedAmount = computed(() => {
   amountTo.value = usdValue / priceTokenB;
   return amountTo.value;
 });
+
+
 const SelectedToBanalace = computed(() => {
   const fromToken = balances.value.find(
     (token) => token.address === selectedTo.value.address
@@ -253,11 +235,12 @@ watch(connected, fetchBalances, { immediate: false });
                           }"
                           :max="Number(selectedFrom.balance)"
                           step="any"
+                             required
                           type="number"
                           v-model="amountFrom"
                           class="form-control text-sm"
                           placeholder="0.00"
-                          required
+                       
                         />
                         <div class="input-group-append input-group-text p-1">
                           <select

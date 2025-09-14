@@ -15,6 +15,7 @@ const click = ref(0);
 const click1 = ref(false);
 const click2 = ref(false);
 const click3 = ref(false);
+
 const trueCount = computed(() => {
   return [click1.value, click2.value, click3.value].filter((v) => v).length;
 });

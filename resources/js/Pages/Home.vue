@@ -172,6 +172,10 @@ onMounted(() => {
         </h5>
         <div class="partner grayscale-item crypt-scroll in-view">
           <div class="crypt-scrolling scroll-right">
+     
+
+
+    
             <div>
               <img
                 alt=""
@@ -179,20 +183,8 @@ onMounted(() => {
                 src="https://crypt.tophivetheme.com/demo/images/partner/logo-3.svg"
               />
             </div>
-            <div>
-              <img
-                alt=""
-                style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-2.svg"
-              />
-            </div>
-            <div>
-              <img
-                alt=""
-                style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-4.svg"
-              />
-            </div>
+
+
             <div>
               <img
                 alt=""
@@ -200,62 +192,24 @@ onMounted(() => {
                 src="https://crypt.tophivetheme.com/demo/images/partner/logo-9.svg"
               />
             </div>
+
             <div>
               <img
                 alt=""
                 style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-10.svg"
+                src="img/partner/magiceden.svg"
               />
             </div>
+
             <div>
               <img
                 alt=""
                 style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-5.svg"
+                src="img/partner/uni.svg"
               />
             </div>
-            <div>
-              <img
-                alt=""
-                style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-3.svg"
-              />
-            </div>
-            <div>
-              <img
-                alt=""
-                style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-2.svg"
-              />
-            </div>
-            <div>
-              <img
-                alt=""
-                style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-4.svg"
-              />
-            </div>
-            <div>
-              <img
-                alt=""
-                style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-9.svg"
-              />
-            </div>
-            <div>
-              <img
-                alt=""
-                style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-10.svg"
-              />
-            </div>
-            <div>
-              <img
-                alt=""
-                style="width: 200px"
-                src="https://crypt.tophivetheme.com/demo/images/partner/logo-5.svg"
-              />
-            </div>
+
+
           </div>
         </div>
       </section>
@@ -1014,144 +968,10 @@ onMounted(() => {
           <div
             class="d-flex flex-row justify-content-center align-items-center text-center gap-1 mt-3"
           >
-            <!-- <svg
-              width="24"
-              height="24"
-              viewBox="0 0 18 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z"
-                fill="#339af0"
-                fill-opacity="0.23"
-              ></path>
-              <path
-                d="M6.75 9L8.25 10.5L11.25 7.5"
-                stroke="#339af0"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></path>
-            </svg>
-             -->
+          
           </div>
         </div>
       </section>
     </div>
   </AppLayout>
 </template>
-
-<style scoped>
-.section-begin {
-  background-color: #211949;
-  position: relative;
-  overflow: hidden;
-}
-.section-begin::before {
-  content: "";
-  display: block;
-  width: 95%;
-  height: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  background-image: url(https://tf.bda.dev/mynt/img/section-begin-back.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom right;
-  z-index: 1;
-}
-@media (min-width: 768px) {
-  .section-begin::before {
-    width: 633px;
-  }
-}
-.section-begin__container {
-  padding: 80px 20px 70px 20px;
-}
-@media (min-width: 768px) {
-  .section-begin__container {
-    padding: 80px 20px 80px 60px;
-  }
-}
-@media (min-width: 1201px) {
-  .section-begin__container {
-    padding: 155px 20px 160px 130px;
-  }
-}
-.section-begin__columns {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 2;
-  position: relative;
-}
-@media (min-width: 768px) {
-  .section-begin__columns {
-    flex-direction: row;
-  }
-}
-@media (min-width: 992px) {
-  .section-begin__column {
-    max-width: 460px;
-  }
-}
-@media (min-width: 768px) {
-  .section-begin__column:not(:last-child) {
-    margin-right: 80px;
-  }
-}
-@media (min-width: 1201px) {
-  .section-begin__column:not(:last-child) {
-    margin-right: 180px;
-  }
-}
-.section-begin__image {
-  background-color: #000303;
-  width: 180px;
-  height: 238px;
-  margin-bottom: 60px;
-  border-radius: 10px;
-  transform: rotate(-6deg);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  overflow: hidden;
-}
-@media (min-width: 768px) {
-  .section-begin__image {
-    width: 270px;
-    height: 360px;
-    margin-bottom: 0;
-  }
-}
-@media (min-width: 992px) {
-  .section-begin__image {
-    width: 300px;
-    height: 380px;
-  }
-}
-@media (min-width: 1201px) {
-  .section-begin__image {
-    width: 366px;
-    height: 483px;
-  }
-}
-.section-begin__image img {
-  width: auto;
-  height: 85%;
-}
-.section-begin__title {
-  color: #fcfcfc;
-}
-.section-begin__text {
-  color: #fcfcfc;
-  margin-bottom: 35px;
-}
-@media (min-width: 768px) {
-  .section-begin__text {
-    margin-bottom: 40px;
-  }
-}
-</style>
