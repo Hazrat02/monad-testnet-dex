@@ -1,0 +1,1 @@
+import{e as a,o as r,b as t,a as o,u as s,Z as c,F as l}from"./app-CFG4GA0H.js";const u={__name:"PrivacyPolicy",props:{policy:String},setup(n){return(p,e)=>(r(),a(l,null,[t(s(c),{title:"Privacy Policy"}),e[0]||(e[0]=o("body",{class:"crypt-dark"},null,-1))],64))}};export{u as default};
